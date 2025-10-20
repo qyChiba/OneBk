@@ -36,7 +36,7 @@ export default function Hero() {
                 className="text-6xl md:text-7xl lg:text-8xl font-black leading-tight"
               >
                 <span className="block">嘿！我是</span>
-                <span className="block text-gradient-neon animate-pulse-slow">小明</span>
+                <span className="block text-gradient-neon">小明</span>
                 <span className="block text-4xl md:text-5xl lg:text-6xl mt-4">
                   <span className="text-gradient">代码创造者</span>
                   <motion.span
@@ -133,59 +133,35 @@ export default function Hero() {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="relative"
             >
-              <motion.div
-                whileHover={{ rotateY: 10, rotateX: 5 }}
-                transition={{ duration: 0.3 }}
-                className="relative w-full h-96 lg:h-[500px]"
-              >
+              <div className="relative w-full h-96 lg:h-[500px]">
                 {/* Main Card */}
-                <div className="absolute inset-0 glass-strong rounded-3xl p-8 neon-glow">
+                <div className="absolute inset-0 glass-strong rounded-3xl p-8">
                   <div className="h-full flex flex-col justify-center items-center space-y-6">
                     {/* Avatar */}
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                      className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20"
-                    >
-                      <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-400 to-secondary-400 flex items-center justify-center text-3xl font-bold"
-                      >
+                    <div className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20">
+                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-400 to-secondary-400 flex items-center justify-center text-3xl font-bold">
                         创
-                      </motion.div>
-                    </motion.div>
+                      </div>
+                    </div>
 
                     {/* Floating Elements */}
-                    <motion.div
-                      animate={{ y: [0, -10, 0] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center"
-                    >
+                    <div className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center">
                       <span className="text-2xl">💻</span>
-                    </motion.div>
+                    </div>
                     
-                    <motion.div
-                      animate={{ y: [0, 10, 0] }}
-                      transition={{ duration: 2.5, repeat: Infinity, delay: 1 }}
-                      className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center"
-                    >
+                    <div className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center">
                       <span className="text-xl">🚀</span>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                      animate={{ y: [0, -15, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
-                      className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center"
-                    >
+                    <div className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center">
                       <span className="text-sm">✨</span>
-                    </motion.div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Background Glow */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 via-secondary-500/20 to-accent-cyan/20 rounded-3xl blur-xl animate-pulse-slow" />
-              </motion.div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 via-secondary-500/20 to-accent-cyan/20 rounded-3xl blur-xl" />
+              </div>
             </motion.div>
           </div>
 

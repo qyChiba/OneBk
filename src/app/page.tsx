@@ -10,9 +10,12 @@ import Stats from '@/components/Stats'
 import Blog from '@/components/Blog'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
+import ParticleBackground from '@/components/ParticleBackground'
+
 export default function Home() {
   return (
     <main className="min-h-screen relative">
+      <ParticleBackground />
       <Header />
       <Hero />
       <About />
