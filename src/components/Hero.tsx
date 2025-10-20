@@ -78,27 +78,22 @@ export default function Hero() {
                 className="grid grid-cols-3 gap-6"
               >
                 {[
-                  { value: '20+', label: '项目经验', emoji: '💻', color: 'primary' },
-                  { value: '3年', label: '学习编程', emoji: '📚', color: 'secondary' },
-                  { value: '∞', label: '热爱技术', emoji: '❤️', color: 'accent' },
+                  { value: '20+', label: '项目经验', emoji: '💻' },
+                  { value: '3年', label: '学习编程', emoji: '📚' },
+                  { value: '∞', label: '热爱技术', emoji: '❤️' },
                 ].map((stat, index) => (
-                  <motion.div
+                  <div
                     key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="text-center p-4 glass rounded-xl neon-glow hover:neon-glow-green transition-all duration-300"
+                    className="text-center p-4 glass rounded-xl hover:bg-white/10 transition-all duration-300"
                   >
-                    <motion.div
-                      animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, delay: index * 0.5 }}
-                      className="text-3xl mb-2"
-                    >
+                    <div className="text-3xl mb-2">
                       {stat.emoji}
-                    </motion.div>
+                    </div>
                     <div className="text-2xl md:text-3xl font-bold text-gradient mb-1">
                       {stat.value}
                     </div>
                     <div className="text-sm text-slate-400">{stat.label}</div>
-                  </motion.div>
+                  </div>
                 ))}
               </motion.div>
 
