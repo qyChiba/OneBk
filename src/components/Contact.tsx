@@ -10,13 +10,44 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  })
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    alert('消息已发送！')
+    setSubmitStatus('idle')
+
+    try {
+      // 使用 mailto 发送邮件到指定邮箱
+      const subject = encodeURIComponent(`来自 ${formData.name} 的网站联系 - ${formData.subject}`)
+      const body = encodeURIComponent(
+        `姓名: ${formData.name}\n邮箱: ${formData.email}\n主题: ${formData.subject}\n\n消息内容:\n${formData.message}`
+      )
+      
+      // 创建 mailto 链接
+      const mailtoLink = `mailto:1470689462@qq.com?subject=${subject}&body=${body}`
+      window.open(mailtoLink)
+      
+      setSubmitStatus('success')
+      setFormData({ name: '', email: '', subject: '', message: '' })
+    } catch (error) {
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
   return (
@@ -93,6 +124,9 @@ export default function Contact() {
                   <input
                     type="text"
                     id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"
                     placeholder="您的姓名"
@@ -105,6 +139,9 @@ export default function Contact() {
                   <input
                     type="email"
                     id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"
                     placeholder="your@email.com"
@@ -119,6 +156,9 @@ export default function Contact() {
                 <input
                   type="text"
                   id="subject"
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
                   required
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors"
                   placeholder="项目咨询"
@@ -131,6 +171,9 @@ export default function Contact() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   rows={6}
                   required
                   className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary-500 transition-colors resize-none"
@@ -155,6 +198,29 @@ export default function Contact() {
                   </>
                 )}
               </button>
+
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-3 p-4 bg-secondary-500/20 border border-secondary-400/30 rounded-xl"
+                >
+                  <div className="w-5 h-5 text-secondary-400">✓</div>
+                  <span className="text-secondary-300">消息发送成功！我会尽快回复你。</span>
+                </motion.div>
+              )}
+
+              {submitStatus === 'error' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-center gap-3 p-4 bg-red-500/20 border border-red-400/30 rounded-xl"
+                >
+                  <div className="w-5 h-5 text-red-400">✗</div>
+                  <span className="text-red-300">发送失败，请稍后重试。</span>
+                </motion.div>
+              )}
             </motion.form>
           </div>
         </motion.div>

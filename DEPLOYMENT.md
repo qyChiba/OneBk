@@ -27,7 +27,7 @@ git push -u origin main
 3. 点击 "New Project"
 4. 选择你的 GitHub 仓库
 5. 保持默认设置，点击 "Deploy"
-6. 等待部署完成（通常 2-3 分钟）
+6. 等待部署完成（通常 2-3 分钟）选哟
 
 ### 4. 获取免费域名
 - Vercel 会自动分配一个免费域名：`你的项目名.vercel.app`

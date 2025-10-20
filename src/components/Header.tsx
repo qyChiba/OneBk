@@ -38,7 +38,7 @@ export default function Header() {
           {/* Logo */}
           <motion.a
             href="#home"
-            className="text-2xl font-bold text-gradient"
+            className="text-2xl font-bold text-gradient-neon"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -54,7 +54,7 @@ export default function Header() {
                 className="text-sm text-gray-400 hover:text-white transition-colors relative group"
               >
                 {item.name}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-500 to-secondary-500 transition-all group-hover:w-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 to-secondary-400 transition-all group-hover:w-full" />
               </a>
             ))}
           </nav>
