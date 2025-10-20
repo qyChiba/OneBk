@@ -27,11 +27,12 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    @apply bg-primary-500 rounded-full;
+    background-color: #0ea5e9;
+    border-radius: 9999px;
   }
 
   *::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary-400;
+    background-color: #38bdf8;
   }
 }
 
