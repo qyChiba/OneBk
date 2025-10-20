@@ -32,7 +32,11 @@ export default function ParticleBackground() {
 
     const createParticles = () => {
       particlesRef.current = []
-      const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 15000), 50)
+      // 移动端减少粒子数量
+      const isMobile = window.innerWidth < 768
+      const particleCount = isMobile 
+        ? Math.min(Math.floor((canvas.width * canvas.height) / 30000), 20)
+        : Math.min(Math.floor((canvas.width * canvas.height) / 15000), 50)
       
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
