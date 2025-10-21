@@ -3,6 +3,9 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart } from 'lucide-react'
 import TypewriterText from './TypewriterText'
+import Text3D from './Text3D'
+import Button3D from './Button3D'
+import Card3D from './Card3D'
 
 export default function Hero() {
   return (
@@ -17,8 +20,8 @@ export default function Hero() {
               transition={{ duration: 0.8 }}
               className="space-y-8"
             >
-              {/* Main Title */}
-              <motion.h1
+              {/* Main Title with 3D Effect */}
+              <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ 
@@ -27,15 +30,20 @@ export default function Hero() {
                   stiffness: 100,
                   damping: 10
                 }}
-                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight break-words"
               >
-                <span className="block text-gradient-neon">千叶</span>
-                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-4 sm:mt-6 text-slate-300 font-normal leading-relaxed">
+                <Text3D 
+                  className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-gradient-neon"
+                  depth={8}
+                  color="#00d4ff"
+                >
+                  千叶
+                </Text3D>
+                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-4 sm:mt-6 text-slate-300 font-normal leading-relaxed">
                   Dawn is coming
                   <br />
                   Open your eyes
-                </span>
-              </motion.h1>
+                </p>
+              </motion.div>
 
               {/* Description */}
               <motion.div
@@ -103,87 +111,106 @@ export default function Hero() {
                 ))}
               </motion.div>
 
-              {/* CTA Buttons */}
+              {/* CTA Buttons with 3D Effect */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
                 className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
-                <motion.a
-                  href="#projects"
-                  whileHover={{ 
-                    scale: 1.05,
-                    y: -5,
-                    transition: { type: "spring", stiffness: 400, damping: 10 }
-                  }}
-                  whileTap={{ 
-                    scale: 0.95,
-                    transition: { type: "spring", stiffness: 600, damping: 20 }
-                  }}
-                  className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary-500 via-accent-sky to-accent-cyan rounded-xl font-semibold shadow-lg shadow-primary-500/30 hover:shadow-primary-400/50 transition-all inline-flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
-                >
-                  <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Button3D href="#projects" variant="primary">
+                  <Zap className="w-5 h-5" />
                   我做过的
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                </motion.a>
-                <motion.a
-                  href="#contact"
-                  whileHover={{ 
-                    scale: 1.05,
-                    y: -5,
-                    transition: { type: "spring", stiffness: 400, damping: 10 }
-                  }}
-                  whileTap={{ 
-                    scale: 0.95,
-                    transition: { type: "spring", stiffness: 600, damping: 20 }
-                  }}
-                  className="px-6 sm:px-8 py-3 sm:py-4 glass-strong rounded-xl font-semibold hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
-                >
-                  <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-400" />
+                  <ArrowRight className="w-5 h-5" />
+                </Button3D>
+                <Button3D href="#contact" variant="secondary">
+                  <Heart className="w-5 h-5" />
                   联系我
-                </motion.a>
+                </Button3D>
               </motion.div>
             </motion.div>
 
-            {/* Right Content - 3D Card */}
+            {/* Right Content - 3D Interactive Card */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
               className="relative hidden lg:block"
             >
-              <div className="relative w-full h-[400px] lg:h-[500px]">
-                {/* Main Card */}
-                <div className="absolute inset-0 glass-strong rounded-3xl p-8">
+              <Card3D className="w-full h-[400px] lg:h-[500px]" maxRotation={10}>
+                <div className="glass-strong rounded-3xl p-8 h-full relative overflow-hidden">
                   <div className="h-full flex flex-col justify-center items-center space-y-6">
-                    {/* Avatar */}
-                    <div className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden">
+                    {/* Avatar with 3D effect */}
+                    <motion.div 
+                      className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden"
+                      style={{ transformStyle: 'preserve-3d' }}
+                      animate={{
+                        rotateY: [0, 360],
+                      }}
+                      transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
+                    >
                       <img 
                         src="https://api.dicebear.com/7.x/avataaars/svg?seed=Chiba&backgroundColor=00d4ff,22d3ee"
                         alt="千叶头像"
                         className="w-full h-full object-cover"
                       />
-                    </div>
+                    </motion.div>
 
-                    {/* Floating Elements */}
-                    <div className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center">
+                    {/* Floating 3D Elements */}
+                    <motion.div 
+                      className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      style={{ transform: 'translateZ(30px)' }}
+                      animate={{
+                        y: [0, -20, 0],
+                        rotateZ: [0, 10, -10, 0],
+                      }}
+                      transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
                       <span className="text-2xl">💻</span>
-                    </div>
+                    </motion.div>
                     
-                    <div className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center">
+                    <motion.div 
+                      className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      style={{ transform: 'translateZ(40px)' }}
+                      animate={{
+                        y: [0, 15, 0],
+                        rotateZ: [0, -15, 15, 0],
+                      }}
+                      transition={{
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
                       <span className="text-xl">🚀</span>
-                    </div>
+                    </motion.div>
 
-                    <div className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center">
+                    <motion.div 
+                      className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      style={{ transform: 'translateZ(50px)' }}
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        rotate: [0, 180, 360],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }}
+                    >
                       <span className="text-sm">✨</span>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
-
-                {/* Background Glow */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary-500/20 via-secondary-500/20 to-accent-cyan/20 rounded-3xl blur-xl" />
-              </div>
+              </Card3D>
             </motion.div>
           </div>
 
