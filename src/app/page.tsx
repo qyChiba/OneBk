@@ -11,11 +11,13 @@ import Blog from '@/components/Blog'
 import Contact from '@/components/Contact'
 import Footer from '@/components/Footer'
 import ParticleBackground from '@/components/ParticleBackground'
+import FloatingElements from '@/components/FloatingElements'
 
 export default function Home() {
   return (
     <main className="min-h-screen relative">
       <ParticleBackground />
+      <FloatingElements />
       <Header />
       <Hero />
       <About />

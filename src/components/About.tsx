@@ -48,23 +48,23 @@ export default function About() {
             {/* Text Content */}
             <motion.div variants={item} className="space-y-6">
               <p className="text-lg text-gray-300 leading-relaxed">
-                嗨！👋 我是一名计算机专业的大三学生，从高中就开始接触编程。现在主要在学习 Web 开发和算法，偶尔也会折腾一些有趣的小项目。
+                嗨！👋 我是千叶，一个喜欢写代码的高中生。从初中开始接触编程，到现在已经两年了。
               </p>
               <p className="text-gray-400 leading-relaxed">
-                我相信"学以致用"，喜欢通过实践来学习新技术。课余时间会做一些个人项目，参加黑客松，偶尔写写技术博客分享自己的学习经验。最近在研究 Next.js 和 AI 应用开发！
+                平时喜欢做一些小项目、刷刷题，偶尔写写学习笔记。觉得用代码创造东西很有趣，虽然经常遇到 bug，但解决问题的感觉很棒！
               </p>
 
               {/* Expertise Tags */}
               <div className="pt-4">
-                <h3 className="text-xl font-semibold mb-4">技能树 🌳</h3>
+                <h3 className="text-xl font-semibold mb-4">我在学 📚</h3>
                 <div className="flex flex-wrap gap-3">
                   {[
                     '前端开发 💻',
-                    '算法刷题 🧮',
-                    '后端 API 🔌',
-                    '数据库 📊',
-                    '开源贡献 🌍',
-                    'AI 应用 🤖',
+                    '算法题 🧮',
+                    '做小项目 🚀',
+                    'Python 🐍',
+                    'JavaScript 📜',
+                    '瞎折腾 🎨',
                   ].map((tag) => (
                     <span
                       key={tag}

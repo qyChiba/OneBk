@@ -45,7 +45,7 @@ export default function ParticleBackground() {
           vx: (Math.random() - 0.5) * 0.3,
           vy: (Math.random() - 0.5) * 0.3,
           size: Math.random() * 1.5 + 0.5,
-          color: ['#00d4ff', '#00ff88', '#00ffff', '#3b82f6', '#22c55e'][Math.floor(Math.random() * 5)],
+          color: ['#00d4ff', '#22d3ee', '#38bdf8', '#fb923c', '#fbbf24', '#10b981'][Math.floor(Math.random() * 6)],
           opacity: Math.random() * 0.4 + 0.1
         })
       }
@@ -133,13 +133,33 @@ export default function ParticleBackground() {
       transition={{ duration: 2 }}
       className="fixed inset-0 z-0"
     >
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full"
-        style={{ background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)' }}
-      />
-      {/* 渐变遮罩 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-slate-800/60 to-slate-900/80" />
+      <div className="w-full h-full relative overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          className="w-full h-full absolute inset-0"
+          style={{ 
+            background: 'linear-gradient(135deg, #0f172a, #1e293b, #0c4a6e, #1e293b, #0f172a)',
+            backgroundSize: '400% 400%',
+            animation: 'gradientMove 15s ease infinite'
+          }}
+        />
+        {/* 渐变遮罩 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/30 via-primary-900/20 to-slate-900/30" />
+      </div>
+      
+      <style jsx>{`
+        @keyframes gradientMove {
+          0% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+          100% {
+            background-position: 0% 50%;
+          }
+        }
+      `}</style>
     </motion.div>
   )
 }

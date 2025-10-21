@@ -15,21 +15,21 @@ export default function Contact() {
       label: '邮箱', 
       value: '1470689462@qq.com',
       link: 'mailto:1470689462@qq.com',
-      color: 'from-blue-500 to-cyan-500'
+      color: 'from-primary-400 to-accent-cyan'
     },
     { 
       icon: Github, 
       label: 'GitHub', 
       value: 'github.com/qyChiba',
       link: 'https://github.com/qyChiba',
-      color: 'from-gray-600 to-gray-800'
+      color: 'from-slate-600 to-slate-800'
     },
     { 
       icon: MessageCircle, 
       label: 'QQ', 
       value: '1470689462',
       link: '#',
-      color: 'from-green-500 to-emerald-500'
+      color: 'from-secondary-400 to-accent-orange'
     },
   ]
 
@@ -87,20 +87,39 @@ export default function Contact() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.5 + index * 0.1 }}
-                whileHover={{ scale: 1.05, y: -10 }}
-                className="glass rounded-3xl p-8 text-center hover:bg-white/10 transition-all duration-300 group"
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10,
+                  transition: { type: "spring", stiffness: 300, damping: 20 }
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="glass rounded-3xl p-8 text-center hover:bg-white/10 transition-all duration-300 group hover:neon-glow cursor-pointer"
               >
                 <motion.div
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
+                  whileHover={{ 
+                    rotate: [0, -10, 10, -10, 0],
+                    scale: 1.2,
+                    transition: { 
+                      rotate: { duration: 0.5 },
+                      scale: { type: "spring", stiffness: 400 }
+                    }
+                  }}
                   className={`w-20 h-20 mx-auto mb-6 bg-gradient-to-br ${method.color} rounded-2xl flex items-center justify-center`}
                 >
                   <method.icon className="w-10 h-10 text-white" />
                 </motion.div>
-                <h3 className="text-xl font-bold mb-2 text-white">{method.label}</h3>
-                <p className="text-slate-400 group-hover:text-slate-300 transition-colors break-all">
+                <motion.h3 
+                  className="text-xl font-bold mb-2 text-white"
+                  whileHover={{ scale: 1.05 }}
+                >
+                  {method.label}
+                </motion.h3>
+                <motion.p 
+                  className="text-slate-400 group-hover:text-slate-300 transition-colors break-all"
+                  whileHover={{ scale: 1.02, color: "#cbd5e1" }}
+                >
                   {method.value}
-                </p>
+                </motion.p>
               </motion.a>
             ))}
           </div>

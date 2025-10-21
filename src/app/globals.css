@@ -3,10 +3,31 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
-    @apply bg-slate-900 text-white;
+    @apply text-white;
+    background: linear-gradient(135deg, #0f172a, #1e293b, #0c4a6e, #1e293b, #0f172a);
+    background-size: 400% 400%;
+    background-attachment: fixed;
+    animation: gradientMove 15s ease infinite;
     font-feature-settings: 'rlig' 1, 'calt' 1;
     overflow-x: hidden;
+    min-width: 320px;
+  }
+
+  @keyframes gradientMove {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   ::selection {
@@ -38,11 +59,15 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-primary-400 via-secondary-400 to-accent-cyan bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-primary-400 via-accent-sky to-accent-cyan bg-clip-text text-transparent;
   }
 
   .text-gradient-neon {
-    @apply bg-gradient-to-r from-neon-blue via-neon-green to-neon-cyan bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-neon-blue via-neon-cyan to-accent-sky bg-clip-text text-transparent;
+  }
+
+  .text-gradient-warm {
+    @apply bg-gradient-to-r from-secondary-400 via-accent-orange to-accent-yellow bg-clip-text text-transparent;
   }
 
   .glass {

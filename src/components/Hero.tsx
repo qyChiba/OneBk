@@ -6,9 +6,9 @@ import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart } from 'luc
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-20">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -20,11 +20,16 @@ export default function Hero() {
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-6xl md:text-7xl lg:text-8xl font-black leading-tight"
+                transition={{ 
+                  delay: 0.3, 
+                  type: "spring",
+                  stiffness: 100,
+                  damping: 10
+                }}
+                className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight break-words"
               >
                 <span className="block text-gradient-neon">千叶</span>
-                <span className="block text-3xl md:text-4xl lg:text-5xl mt-6 text-slate-300 font-normal">
+                <span className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-4 sm:mt-6 text-slate-300 font-normal leading-relaxed">
                   Dawn is coming
                   <br />
                   Open your eyes
@@ -38,18 +43,22 @@ export default function Hero() {
                 transition={{ delay: 0.5 }}
                 className="space-y-4"
               >
-                <p className="text-xl text-slate-300 leading-relaxed">
-                  一个热爱{' '}
-                  <span className="text-primary-400 font-bold bg-primary-500/20 px-2 py-1 rounded">#编程</span>
-                  、
-                  <span className="text-secondary-400 font-bold bg-secondary-500/20 px-2 py-1 rounded">#学习</span>
-                  {' '}和{' '}
-                  <span className="text-accent-cyan font-bold bg-accent-cyan/20 px-2 py-1 rounded">#分享</span>
-                  {' '}的计算机专业学生
+                <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed">
+                  一个喜欢写代码的高中生
+                  <br />
+                  在这里记录学习和生活 ✨
                 </p>
-                <p className="text-lg text-slate-400">
-                  在这里记录我的学习之旅和项目实践 ✨
-                </p>
+                <div className="flex flex-wrap gap-2 text-sm">
+                  <span className="px-3 py-1 bg-primary-400/20 rounded-full text-primary-300">
+                    💻 编程
+                  </span>
+                  <span className="px-3 py-1 bg-secondary-400/20 rounded-full text-secondary-300">
+                    📚 学习
+                  </span>
+                  <span className="px-3 py-1 bg-accent-cyan/20 rounded-full text-accent-cyan">
+                    🎮 游戏
+                  </span>
+                </div>
               </motion.div>
 
               {/* Interactive Stats */}
@@ -57,25 +66,35 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="grid grid-cols-3 gap-6"
+                className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6"
               >
                 {[
-                  { value: '20+', label: '项目经验', emoji: '💻' },
-                  { value: '3年', label: '学习编程', emoji: '📚' },
-                  { value: '∞', label: '热爱技术', emoji: '❤️' },
+                  { value: '2年', label: '学编程', emoji: '💻' },
+                  { value: '10+', label: '小项目', emoji: '🚀' },
+                  { value: '∞', label: '想做的', emoji: '⭐' },
                 ].map((stat, index) => (
-                  <div
+                  <motion.div
                     key={index}
-                    className="text-center p-4 glass rounded-xl hover:bg-white/10 transition-all duration-300"
+                    whileHover={{ 
+                      scale: 1.1, 
+                      rotate: [0, -5, 5, 0],
+                      transition: { 
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 10
+                      }
+                    }}
+                    whileTap={{ scale: 0.9 }}
+                    className="text-center p-3 sm:p-4 glass rounded-xl hover:bg-white/10 transition-all duration-300 cursor-pointer"
                   >
-                    <div className="text-3xl mb-2">
+                    <div className="text-2xl sm:text-3xl mb-2">
                       {stat.emoji}
                     </div>
-                    <div className="text-2xl md:text-3xl font-bold text-gradient mb-1">
+                    <div className="text-xl sm:text-2xl md:text-3xl font-bold text-gradient mb-1">
                       {stat.value}
                     </div>
-                    <div className="text-sm text-slate-400">{stat.label}</div>
-                  </div>
+                    <div className="text-xs sm:text-sm text-slate-400">{stat.label}</div>
+                  </motion.div>
                 ))}
               </motion.div>
 
@@ -84,25 +103,39 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 }}
-                className="flex flex-col sm:flex-row gap-4"
+                className="flex flex-col sm:flex-row gap-3 sm:gap-4"
               >
                 <motion.a
                   href="#projects"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="group px-8 py-4 bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-cyan rounded-xl font-semibold neon-glow hover:neon-glow-green transition-all inline-flex items-center justify-center gap-3"
+                  whileHover={{ 
+                    scale: 1.05,
+                    y: -5,
+                    transition: { type: "spring", stiffness: 400, damping: 10 }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    transition: { type: "spring", stiffness: 600, damping: 20 }
+                  }}
+                  className="group px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary-500 via-accent-sky to-accent-cyan rounded-xl font-semibold shadow-lg shadow-primary-500/30 hover:shadow-primary-400/50 transition-all inline-flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
                 >
-                  <Zap className="w-5 h-5" />
-                  看看我的项目
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <Zap className="w-4 h-4 sm:w-5 sm:h-5" />
+                  我做过的
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </motion.a>
                 <motion.a
                   href="#contact"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-4 glass-strong rounded-xl font-semibold hover:bg-white/10 transition-all inline-flex items-center justify-center gap-3"
+                  whileHover={{ 
+                    scale: 1.05,
+                    y: -5,
+                    transition: { type: "spring", stiffness: 400, damping: 10 }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    transition: { type: "spring", stiffness: 600, damping: 20 }
+                  }}
+                  className="px-6 sm:px-8 py-3 sm:py-4 glass-strong rounded-xl font-semibold hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2 sm:gap-3 text-sm sm:text-base"
                 >
-                  <Heart className="w-5 h-5 text-secondary-400" />
+                  <Heart className="w-4 h-4 sm:w-5 sm:h-5 text-secondary-400" />
                   联系我
                 </motion.a>
               </motion.div>
@@ -113,9 +146,9 @@ export default function Hero() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative"
+              className="relative hidden lg:block"
             >
-              <div className="relative w-full h-96 lg:h-[500px]">
+              <div className="relative w-full h-[400px] lg:h-[500px]">
                 {/* Main Card */}
                 <div className="absolute inset-0 glass-strong rounded-3xl p-8">
                   <div className="h-full flex flex-col justify-center items-center space-y-6">

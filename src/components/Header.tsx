@@ -35,60 +35,66 @@ export default function Header() {
     >
       <div className="container mx-auto px-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <motion.a
-            href="#home"
-            className="text-2xl font-bold text-gradient-neon"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            创作
-          </motion.a>
-
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-8 mx-auto">
             {navItems.map((item) => (
-              <a
+              <motion.a
                 key={item.name}
                 href={item.href}
+                whileHover={{ scale: 1.1, y: -2 }}
+                whileTap={{ scale: 0.95 }}
                 className="text-sm text-gray-400 hover:text-white transition-colors relative group"
               >
                 {item.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-primary-400 to-secondary-400 transition-all group-hover:w-full" />
-              </a>
+              </motion.a>
             ))}
           </nav>
 
           {/* Mobile Menu Button */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.9, rotate: 90 }}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white"
+            className="md:hidden text-white relative z-50 w-10 h-10 flex items-center justify-center glass rounded-lg"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+            <motion.div
+              animate={{ rotate: isMobileMenuOpen ? 90 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </motion.div>
+          </motion.button>
         </div>
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <motion.nav
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mt-4 pb-4"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden fixed top-20 right-6 left-6 glass-strong rounded-2xl p-4 shadow-2xl z-40"
           >
-            {navItems.map((item, index) => (
-              <motion.a
-                key={item.name}
-                href={item.href}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block py-2 text-gray-400 hover:text-white transition-colors"
-              >
-                {item.name}
-              </motion.a>
-            ))}
+            <div className="flex flex-col gap-2">
+              {navItems.map((item, index) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  whileHover={{ scale: 1.05, x: 10 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="block py-3 px-4 text-gray-300 hover:text-white transition-colors rounded-xl hover:bg-white/10 relative group"
+                >
+                  <span className="relative z-10">{item.name}</span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-primary-500/10 to-secondary-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"
+                  />
+                </motion.a>
+              ))}
+            </div>
           </motion.nav>
         )}
       </div>
