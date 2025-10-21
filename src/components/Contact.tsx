@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
-import { Mail, Github, MessageCircle, MapPin, Twitter, Linkedin } from 'lucide-react'
+import { Mail, Github, MessageCircle, MapPin } from 'lucide-react'
 
 export default function Contact() {
   const ref = useRef(null)
@@ -31,12 +31,6 @@ export default function Contact() {
       link: '#',
       color: 'from-secondary-400 to-accent-orange'
     },
-  ]
-
-  const socialLinks = [
-    { icon: Github, label: 'GitHub', href: 'https://github.com/qyChiba' },
-    { icon: Twitter, label: 'Twitter', href: '#' },
-    { icon: Linkedin, label: 'LinkedIn', href: '#' },
   ]
 
   return (
@@ -77,7 +71,7 @@ export default function Contact() {
           </div>
 
           {/* Contact Cards */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-8">
             {contactMethods.map((method, index) => (
               <motion.a
                 key={method.label}
@@ -124,43 +118,17 @@ export default function Contact() {
             ))}
           </div>
 
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.8 }}
-            className="text-center"
-          >
-            <h3 className="text-2xl font-bold mb-8 text-gradient">社交媒体</h3>
-            <div className="flex justify-center gap-6">
-              {socialLinks.map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, y: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="w-16 h-16 glass rounded-2xl flex items-center justify-center hover:bg-white/10 transition-all duration-300"
-                  title={social.label}
-                >
-                  <social.icon className="w-8 h-8 text-slate-400 hover:text-white transition-colors" />
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-
           {/* Additional Info */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 1 }}
+            transition={{ delay: 0.8 }}
             className="mt-16 text-center"
           >
             <div className="inline-block glass rounded-2xl px-8 py-4">
               <div className="flex items-center gap-3 text-slate-400">
                 <MapPin className="w-5 h-5 text-primary-400" />
-                <span>中国 · 北京 · 某某大学</span>
+                <span>中国 · 高中在读</span>
               </div>
             </div>
           </motion.div>
