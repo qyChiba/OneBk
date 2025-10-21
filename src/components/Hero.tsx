@@ -153,10 +153,12 @@ export default function Hero() {
                 <div className="absolute inset-0 glass-strong rounded-3xl p-8">
                   <div className="h-full flex flex-col justify-center items-center space-y-6">
                     {/* Avatar */}
-                    <div className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20">
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-400 to-secondary-400 flex items-center justify-center text-3xl font-bold">
-                        创
-                      </div>
+                    <div className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden">
+                      <img 
+                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Chiba&backgroundColor=00d4ff,22d3ee"
+                        alt="千叶头像"
+                        className="w-full h-full object-cover"
+                      />
                     </div>
 
                     {/* Floating Elements */}
