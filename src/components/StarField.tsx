@@ -48,8 +48,18 @@ export default function StarField() {
     }
 
     const drawStar = (star: Star) => {
+      // 验证参数有效性
+      if (!isFinite(star.x) || !isFinite(star.y) || !isFinite(star.radius) || !isFinite(star.z)) {
+        return
+      }
+      
       const size = star.radius * (1 + star.z / 2)
       const opacity = 0.3 + (star.z / 4) * 0.7
+      
+      // 再次验证计算结果
+      if (!isFinite(size) || size <= 0) {
+        return
+      }
       
       ctx.save()
       ctx.globalAlpha = opacity
@@ -108,7 +118,7 @@ export default function StarField() {
         const dy = mouseRef.current.y - star.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         
-        if (distance < 200) {
+        if (distance < 200 && distance > 0) {
           const force = (200 - distance) / 200 * 0.5
           star.vx += (dx / distance) * force * 0.01
           star.vy += (dy / distance) * force * 0.01
@@ -128,6 +138,12 @@ export default function StarField() {
         // 阻尼
         star.vx *= 0.99
         star.vy *= 0.99
+        
+        // 确保所有值都是有限的
+        if (!isFinite(star.x)) star.x = Math.random() * canvas.width
+        if (!isFinite(star.y)) star.y = Math.random() * canvas.height
+        if (!isFinite(star.vx)) star.vx = 0
+        if (!isFinite(star.vy)) star.vy = 0
       })
     }
 

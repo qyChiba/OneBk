@@ -74,17 +74,25 @@ export default function GeometricShapes() {
   return (
     <div ref={containerRef} className="fixed inset-0 w-full h-full pointer-events-none z-5 overflow-hidden">
       <svg className="w-full h-full" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
-        {/* 三角形 */}
+        {/* 三角形 - 漂浮移动 */}
         <polygon
           className="geo-triangle"
           points="100,50 125,100 75,100"
           fill="none"
-          stroke="#00d4ff"
-          strokeWidth="2"
-          opacity="0.4"
-        />
+          stroke="#4a9ec7"
+          strokeWidth="1.5"
+          opacity="0.25"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            values="0,0; 100,80; 0,0"
+            dur="20s"
+            repeatCount="indefinite"
+          />
+        </polygon>
 
-        {/* 方形 */}
+        {/* 方形 - 漂浮移动 */}
         <rect
           className="geo-square"
           x="200"
@@ -92,44 +100,68 @@ export default function GeometricShapes() {
           width="60"
           height="60"
           fill="none"
-          stroke="#22d3ee"
-          strokeWidth="2"
-          opacity="0.5"
+          stroke="#5bb5d8"
+          strokeWidth="1.5"
+          opacity="0.3"
           style={{ transformOrigin: '230px 180px' }}
-        />
+        >
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            values="0,0; -80,120; 0,0"
+            dur="18s"
+            repeatCount="indefinite"
+          />
+        </rect>
 
-        {/* 圆形 */}
+        {/* 圆形 - 漂浮移动 */}
         <circle
           className="geo-circle"
           cx="1700"
           cy="200"
           r="40"
           fill="none"
-          stroke="#38bdf8"
-          strokeWidth="2"
-          opacity="0.4"
-        />
+          stroke="#6ec3e8"
+          strokeWidth="1.5"
+          opacity="0.25"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            values="0,0; -120,100; 0,0"
+            dur="22s"
+            repeatCount="indefinite"
+          />
+        </circle>
 
-        {/* 六边形 */}
+        {/* 六边形 - 漂浮移动 */}
         <polygon
           className="geo-hexagon"
           points="1800,500 1830,520 1830,560 1800,580 1770,560 1770,520"
           fill="none"
-          stroke="#fb923c"
-          strokeWidth="2"
-          opacity="0.5"
+          stroke="#7a8fa0"
+          strokeWidth="1.5"
+          opacity="0.3"
           style={{ transformOrigin: '1800px 540px' }}
-        />
+        >
+          <animateTransform
+            attributeName="transform"
+            type="translate"
+            values="0,0; 90,-100; 0,0"
+            dur="24s"
+            repeatCount="indefinite"
+          />
+        </polygon>
 
-        {/* 装饰性脉冲圆（减少数量） */}
-        <circle cx="150" cy="900" r="5" fill="#00d4ff" opacity="0.5" className="hidden lg:block">
-          <animate attributeName="r" values="5;12;5" dur="4s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.5;0.1;0.5" dur="4s" repeatCount="indefinite" />
+        {/* 装饰性脉冲圆 - 降低亮度 */}
+        <circle cx="150" cy="900" r="5" fill="#4a9ec7" opacity="0.3" className="hidden lg:block">
+          <animate attributeName="r" values="5;10;5" dur="4s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.3;0.1;0.3" dur="4s" repeatCount="indefinite" />
         </circle>
 
-        <circle cx="1600" cy="100" r="6" fill="#22d3ee" opacity="0.4" className="hidden lg:block">
-          <animate attributeName="r" values="6;15;6" dur="5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.4;0.1;0.4" dur="5s" repeatCount="indefinite" />
+        <circle cx="1600" cy="100" r="6" fill="#5bb5d8" opacity="0.25" className="hidden lg:block">
+          <animate attributeName="r" values="6;12;6" dur="5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.25;0.1;0.25" dur="5s" repeatCount="indefinite" />
         </circle>
       </svg>
     </div>

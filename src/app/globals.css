@@ -9,7 +9,7 @@
   
   body {
     @apply text-white;
-    background: linear-gradient(135deg, #0f172a, #1e293b, #0c4a6e, #1e293b, #0f172a);
+    background: linear-gradient(135deg, #0f172a, #1a2332, #0f1f2e, #1a2332, #0f172a);
     background-size: 400% 400%;
     background-attachment: fixed;
     animation: gradientMove 15s ease infinite;

@@ -1,13 +1,96 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart } from 'lucide-react'
+import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart, Upload } from 'lucide-react'
 import TypewriterText from './TypewriterText'
 import Text3D from './Text3D'
 import Button3D from './Button3D'
 import Card3D from './Card3D'
 
 export default function Hero() {
+  const [customAvatar, setCustomAvatar] = useState<string>('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // 加载自定义头像
+  useEffect(() => {
+    const saved = localStorage.getItem('customAvatar')
+    if (saved) {
+      setCustomAvatar(saved)
+    }
+  }, [])
+
+  // 处理文件上传并压缩
+  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      // 检查文件类型
+      if (!file.type.startsWith('image/')) {
+        alert('请上传图片文件')
+        return
+      }
+
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        const img = new Image()
+        img.onload = () => {
+          // 创建 canvas 进行压缩
+          const canvas = document.createElement('canvas')
+          const ctx = canvas.getContext('2d')
+          
+          // 设置最大尺寸（头像使用较小尺寸）
+          const maxSize = 512
+          let width = img.width
+          let height = img.height
+          
+          if (width > height) {
+            if (width > maxSize) {
+              height = (height * maxSize) / width
+              width = maxSize
+            }
+          } else {
+            if (height > maxSize) {
+              width = (width * maxSize) / height
+              height = maxSize
+            }
+          }
+          
+          canvas.width = width
+          canvas.height = height
+          ctx?.drawImage(img, 0, 0, width, height)
+          
+          // 压缩图片
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7)
+          
+          // 检查压缩后的大小
+          if (compressedDataUrl.length > 300000) { // 约 300KB
+            alert('图片太大，请选择更小的图片')
+            return
+          }
+          
+          try {
+            setCustomAvatar(compressedDataUrl)
+            localStorage.setItem('customAvatar', compressedDataUrl)
+          } catch (error) {
+            alert('图片保存失败，请选择更小的图片')
+            console.error('保存头像失败:', error)
+          }
+        }
+        img.src = reader.result as string
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  // 删除头像
+  const handleRemoveAvatar = () => {
+    setCustomAvatar('')
+    localStorage.removeItem('customAvatar')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
@@ -33,8 +116,8 @@ export default function Hero() {
               >
                 <Text3D 
                   className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-gradient-neon"
-                  depth={8}
-                  color="#00d4ff"
+                  depth={3}
+                  color="#4a9ec7"
                 >
                   千叶
                 </Text3D>
@@ -140,29 +223,63 @@ export default function Hero() {
               <Card3D className="w-full h-[400px] lg:h-[500px]" maxRotation={10}>
                 <div className="glass-strong rounded-3xl p-8 h-full relative overflow-hidden">
                   <div className="h-full flex flex-col justify-center items-center space-y-6">
-                    {/* Avatar with 3D effect */}
-                    <motion.div 
-                      className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden"
-                      style={{ transformStyle: 'preserve-3d' }}
-                      animate={{
-                        rotateY: [0, 360],
-                      }}
-                      transition={{
-                        duration: 20,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    >
-                      <img 
-                        src="https://api.dicebear.com/7.x/avataaars/svg?seed=Chiba&backgroundColor=00d4ff,22d3ee"
-                        alt="千叶头像"
-                        className="w-full h-full object-cover"
-                      />
-                    </motion.div>
+                    {/* Avatar with 3D effect and upload button */}
+                    <div className="relative group">
+                      <motion.div 
+                        className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden"
+                        style={{ transformStyle: 'preserve-3d' }}
+                        animate={{
+                          rotateY: [0, 360],
+                        }}
+                        transition={{
+                          duration: 20,
+                          repeat: Infinity,
+                          ease: 'linear',
+                        }}
+                      >
+                        <img 
+                          src={customAvatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Chiba&backgroundColor=00d4ff,22d3ee"}
+                          alt="千叶头像"
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                      
+                      {/* Upload button - appears on hover */}
+                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleAvatarUpload}
+                          className="hidden"
+                        />
+                        <motion.button
+                          onClick={() => fileInputRef.current?.click()}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="px-2 py-1 text-xs bg-primary-500 hover:bg-primary-600 rounded-full flex items-center gap-1 transition-colors shadow-lg"
+                          title="上传头像"
+                        >
+                          <Upload className="w-3 h-3" />
+                          <span>上传</span>
+                        </motion.button>
+                        {customAvatar && (
+                          <motion.button
+                            onClick={handleRemoveAvatar}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 rounded-full transition-colors shadow-lg"
+                            title="删除头像"
+                          >
+                            删除
+                          </motion.button>
+                        )}
+                      </div>
+                    </div>
 
                     {/* Floating 3D Elements */}
                     <motion.div 
-                      className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
                       style={{ transform: 'translateZ(30px)' }}
                       animate={{
                         y: [0, -20, 0],
@@ -178,7 +295,7 @@ export default function Hero() {
                     </motion.div>
                     
                     <motion.div 
-                      className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
                       style={{ transform: 'translateZ(40px)' }}
                       animate={{
                         y: [0, 15, 0],
@@ -194,7 +311,7 @@ export default function Hero() {
                     </motion.div>
 
                     <motion.div 
-                      className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm"
+                      className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
                       style={{ transform: 'translateZ(50px)' }}
                       animate={{
                         scale: [1, 1.3, 1],

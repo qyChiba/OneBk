@@ -16,7 +16,7 @@ import FloatingElements from '@/components/FloatingElements'
 import WaveBackground from '@/components/WaveBackground'
 import StarField from '@/components/StarField'
 import GeometricShapes from '@/components/GeometricShapes'
-import RotatingCube from '@/components/RotatingCube'
+// import RotatingCube from '@/components/RotatingCube'
 import SpiralParticles from '@/components/SpiralParticles'
 import { detectPerformance, type PerformanceConfig } from '@/lib/performanceConfig'
 
@@ -52,7 +52,7 @@ export default function Home() {
       {perfConfig.enableGeometricShapes && <GeometricShapes />}
       {perfConfig.enableWaveBackground && <WaveBackground />}
       {perfConfig.enableFloatingElements && <FloatingElements />}
-      {perfConfig.enableRotatingCube && <RotatingCube />}
+      {/* {perfConfig.enableRotatingCube && <RotatingCube />} */}
       {perfConfig.animationQuality === 'high' && <SpiralParticles />}
       
       {/* 页面内容 */}

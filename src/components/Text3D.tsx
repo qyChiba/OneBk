@@ -67,8 +67,8 @@ export default function Text3D({
           style={{
             transform: `translateZ(${-i * 2}px)`,
             color: color,
-            opacity: 1 - i / depth,
-            textShadow: `0 0 ${20 - i * 2}px ${color}`,
+            opacity: 0.15 - i / (depth * 3),
+            textShadow: 'none',
           }}
           aria-hidden="true"
         >
@@ -81,7 +81,8 @@ export default function Text3D({
         className="relative block"
         style={{
           transform: 'translateZ(0px)',
-          textShadow: `0 0 30px ${color}, 0 0 60px ${color}`,
+          textShadow: `0 0 5px ${color}60`,
+          filter: 'contrast(1.1) brightness(1.05)',
         }}
       >
         {children}

@@ -6,18 +6,16 @@ import { motion } from 'framer-motion'
 interface Particle3D {
   x: number
   y: number
-  z: number
-  angle: number
-  radius: number
-  speed: number
+  vx: number
+  vy: number
   size: number
   color: string
+  alpha: number
 }
 
 export default function SpiralParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const particlesRef = useRef<Particle3D[]>([])
-  const angleRef = useRef(0)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -33,86 +31,78 @@ export default function SpiralParticles() {
 
     const createParticles = () => {
       particlesRef.current = []
-      const particleCount = 150
+      const particleCount = 60
 
-      const colors = ['#00d4ff', '#22d3ee', '#38bdf8', '#fb923c', '#fbbf24', '#10b981']
+      const colors = ['#4a9ec7', '#5bb5d8', '#6ec3e8', '#7a8fa0', '#8b9dc1', '#6a9fb8']
 
       for (let i = 0; i < particleCount; i++) {
-        const angle = (i / particleCount) * Math.PI * 8
-        const radius = (i / particleCount) * 200
-
         particlesRef.current.push({
-          x: 0,
-          y: 0,
-          z: i * 2,
-          angle: angle,
-          radius: radius,
-          speed: 0.01 + Math.random() * 0.02,
-          size: 2 + Math.random() * 3,
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          size: 1 + Math.random() * 2,
           color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 0.3 + Math.random() * 0.4,
         })
       }
     }
 
     const drawParticle = (particle: Particle3D) => {
-      // 3D 投影
-      const scale = 300 / (300 + particle.z)
-      const x2d = canvas.width / 2 + particle.x * scale
-      const y2d = canvas.height / 2 + particle.y * scale
-      const size = particle.size * scale
-
-      if (x2d < 0 || x2d > canvas.width || y2d < 0 || y2d > canvas.height) return
-
       ctx.save()
-      ctx.globalAlpha = scale * 0.8
+      ctx.globalAlpha = particle.alpha
 
       // 粒子光晕
-      const gradient = ctx.createRadialGradient(x2d, y2d, 0, x2d, y2d, size * 3)
+      const gradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, particle.size * 2)
       gradient.addColorStop(0, particle.color)
-      gradient.addColorStop(0.5, particle.color + '80')
+      gradient.addColorStop(0.5, particle.color + '40')
       gradient.addColorStop(1, particle.color + '00')
 
       ctx.fillStyle = gradient
       ctx.beginPath()
-      ctx.arc(x2d, y2d, size * 3, 0, Math.PI * 2)
+      ctx.arc(particle.x, particle.y, particle.size * 2, 0, Math.PI * 2)
       ctx.fill()
 
       // 粒子核心
-      ctx.fillStyle = '#ffffff'
+      ctx.fillStyle = particle.color + 'aa'
       ctx.beginPath()
-      ctx.arc(x2d, y2d, size, 0, Math.PI * 2)
+      ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
       ctx.fill()
 
       ctx.restore()
     }
 
     const updateParticles = () => {
-      angleRef.current += 0.005
-
       particlesRef.current.forEach((particle) => {
-        particle.angle += particle.speed
+        // 更新位置
+        particle.x += particle.vx
+        particle.y += particle.vy
 
-        // 螺旋运动
-        particle.x = Math.cos(particle.angle) * particle.radius
-        particle.y = Math.sin(particle.angle) * particle.radius
-        particle.z = Math.sin(angleRef.current + particle.angle) * 150
+        // 边界检测 - 从对面重新进入
+        if (particle.x < 0) particle.x = canvas.width
+        if (particle.x > canvas.width) particle.x = 0
+        if (particle.y < 0) particle.y = canvas.height
+        if (particle.y > canvas.height) particle.y = 0
 
-        // 循环
-        if (particle.z > 300) {
-          particle.z = -300
+        // 轻微的随机漂移
+        particle.vx += (Math.random() - 0.5) * 0.02
+        particle.vy += (Math.random() - 0.5) * 0.02
+
+        // 限制速度
+        const maxSpeed = 1
+        const speed = Math.sqrt(particle.vx ** 2 + particle.vy ** 2)
+        if (speed > maxSpeed) {
+          particle.vx = (particle.vx / speed) * maxSpeed
+          particle.vy = (particle.vy / speed) * maxSpeed
         }
       })
     }
 
     const animate = () => {
-      ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
 
       updateParticles()
-
-      // 按 Z 值排序（远的先画）
-      const sorted = [...particlesRef.current].sort((a, b) => a.z - b.z)
-      sorted.forEach(drawParticle)
+      particlesRef.current.forEach(drawParticle)
 
       requestAnimationFrame(animate)
     }
