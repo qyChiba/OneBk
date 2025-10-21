@@ -9,62 +9,65 @@ export default function GeometricShapes() {
   useEffect(() => {
     if (!containerRef.current) return
 
-    // 三角形动画
-    animate('.geo-triangle', {
-      rotate: '1turn',
-      duration: 20000,
-      ease: 'linear',
-      loop: true
-    })
+    // 检测性能模式
+    const isMobile = window.innerWidth < 768
+    const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4
 
-    // 方形动画
-    animate('.geo-square', {
-      rotate: [45, -45],
-      scale: [1.2, 0.8],
-      ease: 'inOut(quad)',
-      loop: true,
-      alternate: true,
-      duration: 2000
-    })
+    if (isMobile || isLowEnd) {
+      // 低性能模式：只运行部分动画
+      animate('.geo-circle', {
+        translateX: [20, -20],
+        translateY: [-15, 15],
+        ease: 'inOut(sine)',
+        loop: true,
+        alternate: true,
+        duration: 4000
+      })
 
-    // 圆形动画
-    animate('.geo-circle', {
-      translateX: [30, -30],
-      translateY: [-20, 20],
-      scale: [1.1, 0.9],
-      ease: 'inOut(sine)',
-      loop: true,
-      alternate: true,
-      duration: 3000
-    })
+      animate('.geo-hexagon', {
+        rotate: [30, -30],
+        opacity: [0.6, 0.2],
+        ease: 'inOut(cubic)',
+        loop: true,
+        alternate: true,
+        duration: 4000
+      })
+    } else {
+      // 高性能模式：运行所有动画
+      animate('.geo-triangle', {
+        rotate: '1turn',
+        duration: 25000,
+        ease: 'linear',
+        loop: true
+      })
 
-    // 六边形动画
-    animate('.geo-hexagon', {
-      rotate: [60, -60],
-      opacity: [0.8, 0.3],
-      ease: 'inOut(cubic)',
-      loop: true,
-      alternate: true,
-      duration: 3000
-    })
+      animate('.geo-square', {
+        rotate: [30, -30],
+        scale: [1.1, 0.9],
+        ease: 'inOut(quad)',
+        loop: true,
+        alternate: true,
+        duration: 3000
+      })
 
-    // 线条动画
-    animate('.geo-line', {
-      strokeDashoffset: [0, 100],
-      ease: 'inOut(sine)',
-      duration: 3000,
-      loop: true,
-      alternate: true
-    })
+      animate('.geo-circle', {
+        translateX: [20, -20],
+        translateY: [-15, 15],
+        ease: 'inOut(sine)',
+        loop: true,
+        alternate: true,
+        duration: 4000
+      })
 
-    // 路径变形动画
-    animate('.geo-morph', {
-      d: ['M50,50 Q75,25 100,50 T150,50', 'M50,50 Q75,75 100,50 T150,50'],
-      ease: 'inOut(quad)',
-      duration: 2000,
-      loop: true,
-      alternate: true
-    })
+      animate('.geo-hexagon', {
+        rotate: [40, -40],
+        opacity: [0.6, 0.2],
+        ease: 'inOut(cubic)',
+        loop: true,
+        alternate: true,
+        duration: 4000
+      })
+    }
 
   }, [])
 
@@ -118,42 +121,15 @@ export default function GeometricShapes() {
           style={{ transformOrigin: '1800px 540px' }}
         />
 
-        {/* 动画线条 */}
-        <path
-          className="geo-line"
-          d="M100,800 Q400,750 700,800 T1300,800"
-          fill="none"
-          stroke="#fbbf24"
-          strokeWidth="2"
-          opacity="0.3"
-          strokeDasharray="10 5"
-        />
-
-        {/* 变形路径 */}
-        <path
-          className="geo-morph"
-          d="M50,50 Q75,25 100,50 T150,50"
-          fill="none"
-          stroke="#10b981"
-          strokeWidth="2"
-          opacity="0.4"
-          transform="translate(300, 400)"
-        />
-
-        {/* 更多装饰性图形 */}
-        <circle cx="150" cy="900" r="5" fill="#00d4ff" opacity="0.6">
-          <animate attributeName="r" values="5;15;5" dur="3s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite" />
-        </circle>
-
-        <circle cx="1600" cy="100" r="8" fill="#22d3ee" opacity="0.5">
-          <animate attributeName="r" values="8;20;8" dur="4s" repeatCount="indefinite" />
+        {/* 装饰性脉冲圆（减少数量） */}
+        <circle cx="150" cy="900" r="5" fill="#00d4ff" opacity="0.5" className="hidden lg:block">
+          <animate attributeName="r" values="5;12;5" dur="4s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.5;0.1;0.5" dur="4s" repeatCount="indefinite" />
         </circle>
 
-        <circle cx="900" cy="300" r="6" fill="#fb923c" opacity="0.4">
-          <animate attributeName="r" values="6;18;6" dur="3.5s" repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0.4;0.15;0.4" dur="3.5s" repeatCount="indefinite" />
+        <circle cx="1600" cy="100" r="6" fill="#22d3ee" opacity="0.4" className="hidden lg:block">
+          <animate attributeName="r" values="6;15;6" dur="5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.4;0.1;0.4" dur="5s" repeatCount="indefinite" />
         </circle>
       </svg>
     </div>

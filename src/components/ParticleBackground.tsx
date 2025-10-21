@@ -35,8 +35,8 @@ export default function ParticleBackground() {
       // 移动端减少粒子数量
       const isMobile = window.innerWidth < 768
       const particleCount = isMobile 
-        ? Math.min(Math.floor((canvas.width * canvas.height) / 30000), 20)
-        : Math.min(Math.floor((canvas.width * canvas.height) / 15000), 50)
+        ? Math.min(Math.floor((canvas.width * canvas.height) / 40000), 15)
+        : Math.min(Math.floor((canvas.width * canvas.height) / 20000), 35)
       
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({

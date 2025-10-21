@@ -19,14 +19,18 @@ export default function RotatingCube() {
   const rotationRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
+    // 移动端和低性能设备不渲染
+    if (window.innerWidth < 1024) return
+    if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) return
+
     const canvas = canvasRef.current
     if (!canvas) return
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    canvas.width = 400
-    canvas.height = 400
+    canvas.width = 350
+    canvas.height = 350
 
     const centerX = canvas.width / 2
     const centerY = canvas.height / 2
@@ -132,11 +136,11 @@ export default function RotatingCube() {
       })
     }
 
-    // GSAP 动画
+    // GSAP 动画（慢速旋转以节省性能）
     gsap.to(rotationRef.current, {
       x: Math.PI * 2,
       y: Math.PI * 2,
-      duration: 10,
+      duration: 15,
       repeat: -1,
       ease: 'none',
       onUpdate: drawCube

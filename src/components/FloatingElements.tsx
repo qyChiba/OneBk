@@ -15,7 +15,27 @@ export default function FloatingElements() {
     return () => window.removeEventListener('mousemove', handleMouseMove)
   }, [])
 
-  const floatingShapes = [
+  // 根据设备性能调整浮动元素数量
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+  
+  const floatingShapes = isMobile ? [
+    { 
+      id: 1, 
+      size: 100, 
+      color: 'from-primary-400/15 to-accent-cyan/15',
+      initialX: '20%',
+      initialY: '30%',
+      duration: 25
+    },
+    { 
+      id: 2, 
+      size: 80, 
+      color: 'from-secondary-400/15 to-accent-orange/15',
+      initialX: '70%',
+      initialY: '60%',
+      duration: 30
+    },
+  ] : [
     { 
       id: 1, 
       size: 120, 
@@ -48,14 +68,6 @@ export default function FloatingElements() {
       initialY: '60%',
       duration: 18
     },
-    { 
-      id: 5, 
-      size: 90, 
-      color: 'from-accent-emerald/20 to-accent-teal/20',
-      initialX: '50%',
-      initialY: '50%',
-      duration: 23
-    },
   ]
 
   return (
@@ -71,15 +83,15 @@ export default function FloatingElements() {
             top: shape.initialY,
           }}
           animate={{
-            x: [0, 100, -50, 50, 0],
-            y: [0, -80, 50, -30, 0],
-            scale: [1, 1.2, 0.8, 1.1, 1],
-            rotate: [0, 90, 180, 270, 360],
+            x: [0, 60, -30, 30, 0],
+            y: [0, -50, 30, -20, 0],
+            scale: [1, 1.1, 0.9, 1.05, 1],
+            rotate: [0, 180, 360],
           }}
           transition={{
             duration: shape.duration,
             repeat: Infinity,
-            ease: "easeInOut",
+            ease: "linear",
           }}
           drag
           dragConstraints={{ left: -100, right: 100, top: -100, bottom: 100 }}

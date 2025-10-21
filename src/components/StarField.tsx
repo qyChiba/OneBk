@@ -30,7 +30,10 @@ export default function StarField() {
 
     const createStars = () => {
       starsRef.current = []
-      const starCount = Math.min(Math.floor((canvas.width * canvas.height) / 8000), 200)
+      const isMobile = window.innerWidth < 768
+      const starCount = isMobile 
+        ? Math.min(Math.floor((canvas.width * canvas.height) / 15000), 50)
+        : Math.min(Math.floor((canvas.width * canvas.height) / 10000), 100)
       
       for (let i = 0; i < starCount; i++) {
         starsRef.current.push({
@@ -72,24 +75,29 @@ export default function StarField() {
     }
 
     const connectStars = () => {
+      // 限制连线数量以提升性能
+      const maxConnections = 3
       starsRef.current.forEach((star, i) => {
-        starsRef.current.slice(i + 1).forEach(otherStar => {
+        let connections = 0
+        for (let j = i + 1; j < starsRef.current.length && connections < maxConnections; j++) {
+          const otherStar = starsRef.current[j]
           const dx = star.x - otherStar.x
           const dy = star.y - otherStar.y
           const distance = Math.sqrt(dx * dx + dy * dy)
 
-          if (distance < 150) {
+          if (distance < 120) {
             ctx.save()
-            ctx.globalAlpha = (150 - distance) / 150 * 0.15
+            ctx.globalAlpha = (120 - distance) / 120 * 0.12
             ctx.strokeStyle = '#00d4ff'
-            ctx.lineWidth = 1
+            ctx.lineWidth = 0.5
             ctx.beginPath()
             ctx.moveTo(star.x, star.y)
             ctx.lineTo(otherStar.x, otherStar.y)
             ctx.stroke()
             ctx.restore()
+            connections++
           }
-        })
+        }
       })
     }
 
