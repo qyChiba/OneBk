@@ -23,17 +23,11 @@ export default function Hero() {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-6xl md:text-7xl lg:text-8xl font-black leading-tight"
               >
-                <span className="block">嘿！我是</span>
-                <span className="block text-gradient-neon">小明</span>
-                <span className="block text-4xl md:text-5xl lg:text-6xl mt-4">
-                  <span className="text-gradient">代码创造者</span>
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="inline-block ml-4"
-                  >
-                    🚀
-                  </motion.span>
+                <span className="block text-gradient-neon">千叶</span>
+                <span className="block text-3xl md:text-4xl lg:text-5xl mt-6 text-slate-300 font-normal">
+                  Dawn is coming
+                  <br />
+                  Open your eyes
                 </span>
               </motion.h1>
 
