@@ -118,20 +118,6 @@ export default function Contact() {
             ))}
           </div>
 
-          {/* Additional Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.8 }}
-            className="mt-16 text-center"
-          >
-            <div className="inline-block glass rounded-2xl px-8 py-4">
-              <div className="flex items-center gap-3 text-slate-400">
-                <MapPin className="w-5 h-5 text-primary-400" />
-                <span>中国 · 高中在读</span>
-              </div>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </section>

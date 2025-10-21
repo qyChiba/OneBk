@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import SplitText from './SplitText'
 
 const skills = [
   {
@@ -49,7 +50,15 @@ export default function Skills() {
             <span className="text-primary-500 text-sm font-mono mb-4 block">
               02. 我的武器库 ⚔️
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">技术栈</h2>
+            {isInView && (
+              <SplitText 
+                className="text-4xl md:text-5xl font-bold mb-4 justify-center"
+                animationType="bounce"
+                delay={0.2}
+              >
+                技术栈
+              </SplitText>
+            )}
             <p className="text-gray-400">正在学习和使用的技术 📚</p>
           </div>
 

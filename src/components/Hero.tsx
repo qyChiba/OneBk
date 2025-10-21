@@ -7,6 +7,8 @@ import TypewriterText from './TypewriterText'
 import Text3D from './Text3D'
 import Button3D from './Button3D'
 import Card3D from './Card3D'
+import SplitText from './SplitText'
+import CharacterReveal from './CharacterReveal'
 
 export default function Hero() {
   const [customAvatar, setCustomAvatar] = useState<string>('')
@@ -121,11 +123,22 @@ export default function Hero() {
                 >
                   千叶
                 </Text3D>
-                <p className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-4 sm:mt-6 text-slate-300 font-normal leading-relaxed">
-                  Dawn is coming
-                  <br />
-                  Open your eyes
-                </p>
+                <div className="mt-4 sm:mt-6">
+                  <SplitText 
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-300 font-normal leading-relaxed"
+                    delay={0.5}
+                    animationType="slide"
+                  >
+                    Dawn is coming
+                  </SplitText>
+                  <SplitText 
+                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-300 font-normal leading-relaxed mt-2"
+                    delay={0.8}
+                    animationType="slide"
+                  >
+                    Open your eyes
+                  </SplitText>
+                </div>
               </motion.div>
 
               {/* Description */}
@@ -218,15 +231,27 @@ export default function Hero() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative hidden lg:block"
+              className="relative hidden lg:flex lg:justify-center lg:items-center"
             >
-              <Card3D className="w-full h-[400px] lg:h-[500px]" maxRotation={10}>
-                <div className="glass-strong rounded-3xl p-8 h-full relative overflow-hidden">
-                  <div className="h-full flex flex-col justify-center items-center space-y-6">
+              <Card3D className="w-[450px] h-[450px] flex-shrink-0" maxRotation={10}>
+                <div className="glass-strong rounded-3xl p-8 h-full relative overflow-hidden border-2 border-white/10 shadow-2xl">
+                  {/* 背景装饰 */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 pointer-events-none"></div>
+                  <div className="absolute top-0 left-0 w-32 h-32 bg-primary-500/20 rounded-full blur-3xl"></div>
+                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-secondary-500/20 rounded-full blur-3xl"></div>
+                  
+                  {/* 装饰线条 */}
+                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-400/50 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-secondary-400/50 to-transparent"></div>
+                  
+                  <div className="h-full flex flex-col justify-center items-center space-y-6 relative z-10">
                     {/* Avatar with 3D effect and upload button */}
                     <div className="relative group">
+                      {/* 头像外圈发光效果 */}
+                      <div className="absolute inset-0 w-32 h-32 rounded-full bg-gradient-to-br from-primary-400 to-secondary-400 blur-xl opacity-50 animate-pulse"></div>
+                      
                       <motion.div 
-                        className="w-32 h-32 rounded-full border-4 border-primary-400/30 flex items-center justify-center bg-gradient-to-br from-primary-500/20 to-secondary-500/20 overflow-hidden"
+                        className="relative w-32 h-32 rounded-full border-4 border-primary-400/40 flex items-center justify-center bg-gradient-to-br from-primary-500/30 to-secondary-500/30 overflow-hidden shadow-lg"
                         style={{ transformStyle: 'preserve-3d' }}
                         animate={{
                           rotateY: [0, 360],
@@ -235,6 +260,10 @@ export default function Hero() {
                           duration: 20,
                           repeat: Infinity,
                           ease: 'linear',
+                        }}
+                        whileHover={{
+                          scale: 1.1,
+                          boxShadow: "0 0 30px rgba(0, 212, 255, 0.5)"
                         }}
                       >
                         <img 
@@ -277,9 +306,9 @@ export default function Hero() {
                       </div>
                     </div>
 
-                    {/* Floating 3D Elements */}
+                    {/* Floating 3D Elements - 优化样式 */}
                     <motion.div 
-                      className="absolute top-8 right-8 w-16 h-16 bg-accent-cyan/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
+                      className="absolute top-8 right-8 w-16 h-16 bg-gradient-to-br from-accent-cyan/30 to-primary-400/20 rounded-2xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
                       style={{ transform: 'translateZ(30px)' }}
                       animate={{
                         y: [0, -20, 0],
@@ -290,12 +319,13 @@ export default function Hero() {
                         repeat: Infinity,
                         ease: 'easeInOut',
                       }}
+                      whileHover={{ scale: 1.2 }}
                     >
-                      <span className="text-2xl">💻</span>
+                      <span className="text-3xl filter drop-shadow-lg">💻</span>
                     </motion.div>
                     
                     <motion.div 
-                      className="absolute bottom-8 left-8 w-12 h-12 bg-secondary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
+                      className="absolute bottom-8 left-8 w-14 h-14 bg-gradient-to-br from-secondary-400/30 to-accent-orange/20 rounded-2xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
                       style={{ transform: 'translateZ(40px)' }}
                       animate={{
                         y: [0, 15, 0],
@@ -306,12 +336,13 @@ export default function Hero() {
                         repeat: Infinity,
                         ease: 'easeInOut',
                       }}
+                      whileHover={{ scale: 1.2 }}
                     >
-                      <span className="text-xl">🚀</span>
+                      <span className="text-2xl filter drop-shadow-lg">🚀</span>
                     </motion.div>
 
                     <motion.div 
-                      className="absolute top-1/2 -right-4 w-8 h-8 bg-primary-400/20 rounded-full flex items-center justify-center backdrop-blur-sm overflow-hidden"
+                      className="absolute top-1/2 -right-4 w-10 h-10 bg-gradient-to-br from-primary-400/30 to-accent-yellow/20 rounded-xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
                       style={{ transform: 'translateZ(50px)' }}
                       animate={{
                         scale: [1, 1.3, 1],
@@ -322,39 +353,15 @@ export default function Hero() {
                         repeat: Infinity,
                         ease: 'linear',
                       }}
+                      whileHover={{ scale: 1.4 }}
                     >
-                      <span className="text-sm">✨</span>
+                      <span className="text-lg filter drop-shadow-lg">✨</span>
                     </motion.div>
                   </div>
                 </div>
               </Card3D>
             </motion.div>
           </div>
-
-          {/* Social Links */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex justify-center gap-6 mt-16"
-          >
-            {[
-              { icon: Github, href: '#', label: 'GitHub' },
-              { icon: Twitter, href: '#', label: 'Twitter' },
-              { icon: Linkedin, href: '#', label: 'LinkedIn' },
-            ].map((social, index) => (
-              <motion.a
-                key={index}
-                href={social.href}
-                whileHover={{ scale: 1.1, y: -5 }}
-                whileTap={{ scale: 0.9 }}
-                className="group w-14 h-14 glass-strong rounded-full flex items-center justify-center hover:neon-glow transition-all duration-300"
-                title={social.label}
-              >
-                <social.icon className="w-6 h-6 group-hover:text-primary-400 transition-colors" />
-              </motion.a>
-            ))}
-          </motion.div>
 
           {/* Scroll Indicator */}
           <motion.div

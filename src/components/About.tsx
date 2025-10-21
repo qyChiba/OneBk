@@ -4,12 +4,80 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import { Upload } from 'lucide-react'
+import CharacterReveal from './CharacterReveal'
 
 export default function About() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
   const [customImage, setCustomImage] = useState<string>('')
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // 动态统计数据
+  const [runningTime, setRunningTime] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+  const [visitCount, setVisitCount] = useState(0)
+  const [todayVisits, setTodayVisits] = useState(0)
+
+  // 网站启动时间（设置为今天零点）
+  const startDate = new Date(new Date().setHours(0, 0, 0, 0))
+
+  // 更新运行时间
+  useEffect(() => {
+    const updateRunningTime = () => {
+      const now = new Date()
+      const diff = now.getTime() - startDate.getTime()
+      
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+      
+      setRunningTime({ days, hours, minutes, seconds })
+    }
+
+    updateRunningTime()
+    const timer = setInterval(updateRunningTime, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  // 访问量统计 - 页面加载时只计数一次
+  useEffect(() => {
+    const hasCountedThisSession = sessionStorage.getItem('hasCountedVisit')
+    
+    if (!hasCountedThisSession) {
+      // 总访问量
+      const totalVisits = localStorage.getItem('totalVisits')
+      const currentCount = totalVisits ? parseInt(totalVisits) : 0
+      const newCount = currentCount + 1
+      localStorage.setItem('totalVisits', newCount.toString())
+      setVisitCount(newCount)
+
+      // 今日访问量
+      const today = new Date().toDateString()
+      const lastVisitDate = localStorage.getItem('lastVisitDate')
+      const todayVisitsCount = localStorage.getItem('todayVisits')
+
+      if (lastVisitDate === today) {
+        const count = todayVisitsCount ? parseInt(todayVisitsCount) : 0
+        const newTodayCount = count + 1
+        localStorage.setItem('todayVisits', newTodayCount.toString())
+        setTodayVisits(newTodayCount)
+      } else {
+        localStorage.setItem('lastVisitDate', today)
+        localStorage.setItem('todayVisits', '1')
+        setTodayVisits(1)
+      }
+      
+      // 标记本次会话已计数
+      sessionStorage.setItem('hasCountedVisit', 'true')
+    } else {
+      // 只读取不增加
+      const totalVisits = localStorage.getItem('totalVisits')
+      setVisitCount(totalVisits ? parseInt(totalVisits) : 0)
+      
+      const todayVisitsCount = localStorage.getItem('todayVisits')
+      setTodayVisits(todayVisitsCount ? parseInt(todayVisitsCount) : 0)
+    }
+  }, [])
 
   // 加载自定义图片
   useEffect(() => {
@@ -119,7 +187,11 @@ export default function About() {
             <span className="text-primary-500 text-sm font-mono mb-4 block">
               01. 关于我 🙋‍♂️
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">我的故事</h2>
+            {isInView && (
+              <CharacterReveal className="text-4xl md:text-5xl font-bold mb-4">
+                我的故事
+              </CharacterReveal>
+            )}
             <p className="text-gray-400 max-w-2xl mx-auto">
               一个热爱编程的计算机专业大学生，喜欢折腾各种技术
             </p>
@@ -135,6 +207,65 @@ export default function About() {
               <p className="text-gray-400 leading-relaxed">
                 平时喜欢做一些小项目、刷刷题，偶尔写写学习笔记。觉得用代码创造东西很有趣，虽然经常遇到 bug，但解决问题的感觉很棒！
               </p>
+
+              {/* 动态统计 - 网站运行时间和访问量 */}
+              <div className="grid grid-cols-1 gap-4 pt-4">
+                {/* 网站运行时间 */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.5 }}
+                  className="glass-strong rounded-xl p-4 relative overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-primary-500/10 rounded-full blur-2xl"></div>
+                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-slate-300">
+                    <span className="text-lg">🚀</span>
+                    网站已运行
+                  </h4>
+                  <div className="grid grid-cols-4 gap-2 relative z-10">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-primary-400 font-mono">{runningTime.days}</div>
+                      <div className="text-xs text-slate-400 mt-1">天</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-secondary-400 font-mono">{runningTime.hours}</div>
+                      <div className="text-xs text-slate-400 mt-1">时</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-accent-cyan font-mono">{runningTime.minutes}</div>
+                      <div className="text-xs text-slate-400 mt-1">分</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-accent-orange font-mono">{runningTime.seconds}</div>
+                      <div className="text-xs text-slate-400 mt-1">秒</div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* 访问量统计 */}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.6 }}
+                  className="glass-strong rounded-xl p-4 relative overflow-hidden"
+                >
+                  <div className="absolute top-0 left-0 w-24 h-24 bg-secondary-500/10 rounded-full blur-2xl"></div>
+                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2 text-slate-300">
+                    <span className="text-lg">👀</span>
+                    访问统计
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3 relative z-10">
+                    <div>
+                      <div className="text-xs text-slate-400 mb-1">总访问量</div>
+                      <div className="text-2xl font-bold text-gradient font-mono">{visitCount}</div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-slate-400 mb-1">今日访问</div>
+                      <div className="text-2xl font-bold text-gradient-warm font-mono">{todayVisits}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
 
               {/* Expertise Tags */}
               <div className="pt-4">

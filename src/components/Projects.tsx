@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { ExternalLink, Github } from 'lucide-react'
+import CharacterReveal from './CharacterReveal'
 
 const projects = [
   {
@@ -53,7 +54,11 @@ export default function Projects() {
             <span className="text-primary-500 text-sm font-mono mb-4 block">
               03. 我的项目 🚀
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">做过的东西</h2>
+            {isInView && (
+              <CharacterReveal className="text-4xl md:text-5xl font-bold mb-4">
+                做过的东西
+              </CharacterReveal>
+            )}
             <p className="text-gray-400">学习过程中的实践项目</p>
           </div>
 
