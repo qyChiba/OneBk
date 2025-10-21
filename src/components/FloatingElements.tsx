@@ -63,7 +63,7 @@ export default function FloatingElements() {
       {floatingShapes.map((shape) => (
         <motion.div
           key={shape.id}
-          className={`absolute rounded-full bg-gradient-to-br ${shape.color} blur-2xl`}
+          className={`absolute rounded-full bg-gradient-to-br ${shape.color} blur-2xl pointer-events-auto cursor-grab active:cursor-grabbing`}
           style={{
             width: shape.size,
             height: shape.size,
@@ -86,7 +86,6 @@ export default function FloatingElements() {
           dragElastic={0.1}
           dragTransition={{ bounceStiffness: 600, bounceDamping: 20 }}
           whileHover={{ scale: 1.3 }}
-          className="pointer-events-auto cursor-grab active:cursor-grabbing"
         />
       ))}
 
