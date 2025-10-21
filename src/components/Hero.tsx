@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart } from 'lucide-react'
+import TypewriterText from './TypewriterText'
 
 export default function Hero() {
   return (
@@ -43,11 +44,15 @@ export default function Hero() {
                 transition={{ delay: 0.5 }}
                 className="space-y-4"
               >
-                <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed">
-                  一个喜欢写代码的高中生
-                  <br />
-                  在这里记录学习和生活 ✨
-                </p>
+                <TypewriterText 
+                  texts={[
+                    '一个喜欢写代码的高中生 💻',
+                    '在这里记录学习和生活 ✨',
+                    '热爱编程，享受创造的乐趣 🚀',
+                    '永远保持好奇心 ⭐'
+                  ]}
+                  className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed"
+                />
                 <div className="flex flex-wrap gap-2 text-sm">
                   <span className="px-3 py-1 bg-primary-400/20 rounded-full text-primary-300">
                     💻 编程
