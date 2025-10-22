@@ -17,8 +17,8 @@ export default function About() {
   const [visitCount, setVisitCount] = useState(0)
   const [todayVisits, setTodayVisits] = useState(0)
 
-  // 网站启动时间（设置为今天零点）
-  const startDate = new Date(new Date().setHours(0, 0, 0, 0))
+  // 网站启动时间（2025年10月21号0时0分0秒）
+  const startDate = new Date('2025-10-21T00:00:00')
 
   // 更新运行时间
   useEffect(() => {
