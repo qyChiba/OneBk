@@ -35,7 +35,9 @@ const skills = [
 
 export default function Skills() {
   const ref = useRef(null)
+  const progressRef = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const progressInView = useInView(progressRef, { once: false, margin: '-100px', amount: 0.3 })
 
   return (
     <section id="skills" className="py-32 bg-gradient-to-b from-black to-gray-950" ref={ref}>
@@ -47,9 +49,14 @@ export default function Skills() {
         >
           {/* Section Header */}
           <div className="text-center mb-16">
-            <span className="text-primary-500 text-sm font-mono mb-4 block">
+            <motion.span 
+              className="text-primary-500 text-sm font-mono mb-4 block"
+              initial={{ opacity: 0, y: -10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.5 }}
+            >
               02. 我的武器库 ⚔️
-            </span>
+            </motion.span>
             {isInView && (
               <SplitText 
                 className="text-4xl md:text-5xl font-bold mb-4 justify-center"
@@ -59,11 +66,18 @@ export default function Skills() {
                 技术栈
               </SplitText>
             )}
-            <p className="text-gray-400">正在学习和使用的技术 📚</p>
+            <motion.p 
+              className="text-gray-400"
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              正在学习和使用的技术 📚
+            </motion.p>
           </div>
 
           {/* Skills Grid */}
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8" ref={progressRef}>
             {skills.map((skillGroup, index) => (
               <motion.div
                 key={skillGroup.category}
@@ -102,15 +116,33 @@ export default function Skills() {
                       <div className="h-2 bg-white/5 rounded-full overflow-hidden group-hover:bg-white/10 transition-colors">
                         <motion.div
                           initial={{ width: 0 }}
-                          animate={isInView ? { width: `${skill.level}%` } : {}}
-                          transition={{ duration: 1, delay: index * 0.2 + skillIndex * 0.1 + 0.5 }}
+                          animate={progressInView ? { width: `${skill.level}%` } : { width: 0 }}
+                          transition={{ 
+                            duration: 1.2, 
+                            delay: index * 0.15 + skillIndex * 0.1 + 0.3,
+                            ease: [0.43, 0.13, 0.23, 0.96]
+                          }}
                           whileHover={{ 
                             height: "12px",
+                            boxShadow: "0 0 20px rgba(14, 165, 233, 0.5)",
                             transition: { duration: 0.2 }
                           }}
-                          className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full relative"
+                          className="h-full bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full relative shadow-lg shadow-primary-500/50"
                         >
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
+                          {progressInView && (
+                            <motion.div 
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                              animate={{
+                                x: ['-100%', '200%'],
+                              }}
+                              transition={{
+                                duration: 1.5,
+                                repeat: Infinity,
+                                ease: "linear",
+                                repeatDelay: 3
+                              }}
+                            />
+                          )}
                         </motion.div>
                       </div>
                     </motion.div>

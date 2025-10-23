@@ -80,3 +80,7 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Coding records update script
+scripts/cookies.json
+src/data/coding-records.json

@@ -1,9 +1,10 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Calendar, Clock, ArrowRight } from 'lucide-react'
+import { useRef, useState, useEffect } from 'react'
+import { Calendar, Clock, ArrowRight, X } from 'lucide-react'
+import CodingRecords from './CodingRecords'
 
 const blogPosts = [
   {
@@ -15,12 +16,13 @@ const blogPosts = [
     emoji: '📚',
   },
   {
-    title: 'LeetCode 刷题心得分享',
-    excerpt: '记录我刷算法题的方法和技巧，包括常见题型总结',
+    title: '刷题记录',
+    excerpt: '记录在 LeetCode、洛谷、蓝桥杯、AtCoder、Codeforces 等平台的刷题情况',
     date: '2024-01-10',
-    readTime: '6 分钟',
+    readTime: '实时更新',
     category: '算法',
     emoji: '🧮',
+    isSpecial: true, // 标记这是刷题记录页面
   },
   {
     title: '用 Next.js 搭建个人博客',
@@ -35,6 +37,40 @@ const blogPosts = [
 export default function Blog() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const [showCodingRecords, setShowCodingRecords] = useState(false)
+
+  // 控制背景页面滚动
+  useEffect(() => {
+    if (showCodingRecords) {
+      // 保存当前滚动位置
+      const scrollY = window.scrollY
+      
+      // 打开模态框时禁用背景滚动
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${scrollY}px`
+      document.body.style.width = '100%'
+    } else {
+      // 恢复滚动位置
+      const scrollY = document.body.style.top
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      window.scrollTo(0, parseInt(scrollY || '0') * -1)
+    }
+
+    // 清理函数：组件卸载时恢复滚动
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+    }
+  }, [showCodingRecords])
 
   return (
     <section id="blog" className="py-32" ref={ref}>
@@ -66,6 +102,7 @@ export default function Blog() {
                   scale: 1.02,
                   transition: { type: "spring", stiffness: 300, damping: 20 }
                 }}
+                onClick={() => post.isSpecial && setShowCodingRecords(true)}
                 className="glass rounded-2xl overflow-hidden group hover:shadow-2xl hover:shadow-primary-500/20 transition-all duration-300 cursor-pointer"
               >
                 {/* Gradient Header */}
@@ -174,6 +211,47 @@ export default function Blog() {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Coding Records Modal */}
+      <AnimatePresence>
+        {showCodingRecords && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-hidden"
+            onClick={() => setShowCodingRecords(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="relative w-full max-w-6xl max-h-[90vh] overflow-y-auto bg-gray-900/95 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: 'rgba(14, 165, 233, 0.5) rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              {/* Close Button */}
+              <motion.button
+                whileHover={{ scale: 1.1, rotate: 90 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setShowCodingRecords(false)}
+                className="sticky top-6 right-6 ml-auto mr-6 mt-6 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-sm"
+              >
+                <X className="w-6 h-6" />
+              </motion.button>
+
+              {/* Coding Records Content */}
+              <div className="-mt-14">
+                <CodingRecords />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

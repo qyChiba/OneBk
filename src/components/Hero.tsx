@@ -1,109 +1,32 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Github, Twitter, Linkedin, Sparkles, Zap, Heart, Upload } from 'lucide-react'
+import { ArrowRight, Zap, Heart } from 'lucide-react'
 import TypewriterText from './TypewriterText'
 import Text3D from './Text3D'
 import Button3D from './Button3D'
-import Card3D from './Card3D'
 import SplitText from './SplitText'
-import CharacterReveal from './CharacterReveal'
+import FeatureCards from './FeatureCards'
+import FloatingOrbs from './FloatingOrbs'
+import RotatingText from './SkillTags'
 
 export default function Hero() {
-  const [customAvatar, setCustomAvatar] = useState<string>('')
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  // 加载自定义头像
-  useEffect(() => {
-    const saved = localStorage.getItem('customAvatar')
-    if (saved) {
-      setCustomAvatar(saved)
-    }
-  }, [])
-
-  // 处理文件上传并压缩
-  const handleAvatarUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      // 检查文件类型
-      if (!file.type.startsWith('image/')) {
-        alert('请上传图片文件')
-        return
-      }
-
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        const img = new Image()
-        img.onload = () => {
-          // 创建 canvas 进行压缩
-          const canvas = document.createElement('canvas')
-          const ctx = canvas.getContext('2d')
-          
-          // 设置最大尺寸（头像使用较小尺寸）
-          const maxSize = 512
-          let width = img.width
-          let height = img.height
-          
-          if (width > height) {
-            if (width > maxSize) {
-              height = (height * maxSize) / width
-              width = maxSize
-            }
-          } else {
-            if (height > maxSize) {
-              width = (width * maxSize) / height
-              height = maxSize
-            }
-          }
-          
-          canvas.width = width
-          canvas.height = height
-          ctx?.drawImage(img, 0, 0, width, height)
-          
-          // 压缩图片
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7)
-          
-          // 检查压缩后的大小
-          if (compressedDataUrl.length > 300000) { // 约 300KB
-            alert('图片太大，请选择更小的图片')
-            return
-          }
-          
-          try {
-            setCustomAvatar(compressedDataUrl)
-            localStorage.setItem('customAvatar', compressedDataUrl)
-          } catch (error) {
-            alert('图片保存失败，请选择更小的图片')
-            console.error('保存头像失败:', error)
-          }
-        }
-        img.src = reader.result as string
-      }
-      reader.readAsDataURL(file)
-    }
-  }
-
-  // 删除头像
-  const handleRemoveAvatar = () => {
-    setCustomAvatar('')
-    localStorage.removeItem('customAvatar')
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-  }
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center py-20">
-            {/* Left Content */}
+      {/* Floating Orbs Background */}
+      <FloatingOrbs />
+      
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 py-20 items-start">
+            
+            {/* 左侧内容 */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-6"
             >
               {/* Main Title with 3D Effect */}
               <motion.div
@@ -125,14 +48,14 @@ export default function Hero() {
                 </Text3D>
                 <div className="mt-4 sm:mt-6">
                   <SplitText 
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-300 font-normal leading-relaxed"
+                    className="text-2xl sm:text-3xl md:text-4xl text-slate-300 font-normal leading-relaxed"
                     delay={0.5}
                     animationType="slide"
                   >
                     Dawn is coming
                   </SplitText>
                   <SplitText 
-                    className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-300 font-normal leading-relaxed mt-2"
+                    className="text-2xl sm:text-3xl md:text-4xl text-slate-300 font-normal leading-relaxed mt-2"
                     delay={0.8}
                     animationType="slide"
                   >
@@ -146,7 +69,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="space-y-4"
+                className="space-y-3"
               >
                 <TypewriterText 
                   texts={[
@@ -175,7 +98,7 @@ export default function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6 }}
-                className="grid grid-cols-3 gap-3 sm:gap-4 md:gap-6"
+                className="grid grid-cols-3 gap-4"
               >
                 {[
                   { value: '2年', label: '学编程', emoji: '💻' },
@@ -226,141 +149,24 @@ export default function Hero() {
               </motion.div>
             </motion.div>
 
-            {/* Right Content - 3D Interactive Card */}
+            {/* 右侧内容 */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative hidden lg:flex lg:justify-center lg:items-center"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="space-y-8 flex flex-col justify-start"
             >
-              <Card3D className="w-[450px] h-[450px] flex-shrink-0" maxRotation={10}>
-                <div className="glass-strong rounded-3xl p-8 h-full relative overflow-hidden border-2 border-white/10 shadow-2xl">
-                  {/* 背景装饰 */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-secondary-500/5 pointer-events-none"></div>
-                  <div className="absolute top-0 left-0 w-32 h-32 bg-primary-500/20 rounded-full blur-3xl"></div>
-                  <div className="absolute bottom-0 right-0 w-40 h-40 bg-secondary-500/20 rounded-full blur-3xl"></div>
-                  
-                  {/* 装饰线条 */}
-                  <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-400/50 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-secondary-400/50 to-transparent"></div>
-                  
-                  <div className="h-full flex flex-col justify-center items-center space-y-6 relative z-10">
-                    {/* Avatar with 3D effect and upload button */}
-                    <div className="relative group">
-                      {/* 头像外圈发光效果 */}
-                      <div className="absolute inset-0 w-32 h-32 rounded-full bg-gradient-to-br from-primary-400 to-secondary-400 blur-xl opacity-50 animate-pulse"></div>
-                      
-                      <motion.div 
-                        className="relative w-32 h-32 rounded-full border-4 border-primary-400/40 flex items-center justify-center bg-gradient-to-br from-primary-500/30 to-secondary-500/30 overflow-hidden shadow-lg"
-                        style={{ transformStyle: 'preserve-3d' }}
-                        animate={{
-                          rotateY: [0, 360],
-                        }}
-                        transition={{
-                          duration: 20,
-                          repeat: Infinity,
-                          ease: 'linear',
-                        }}
-                        whileHover={{
-                          scale: 1.1,
-                          boxShadow: "0 0 30px rgba(0, 212, 255, 0.5)"
-                        }}
-                      >
-                        <img 
-                          src={customAvatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Chiba&backgroundColor=00d4ff,22d3ee"}
-                          alt="千叶头像"
-                          className="w-full h-full object-cover"
-                        />
-                      </motion.div>
-                      
-                      {/* Upload button - appears on hover */}
-                      <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={handleAvatarUpload}
-                          className="hidden"
-                        />
-                        <motion.button
-                          onClick={() => fileInputRef.current?.click()}
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className="px-2 py-1 text-xs bg-primary-500 hover:bg-primary-600 rounded-full flex items-center gap-1 transition-colors shadow-lg"
-                          title="上传头像"
-                        >
-                          <Upload className="w-3 h-3" />
-                          <span>上传</span>
-                        </motion.button>
-                        {customAvatar && (
-                          <motion.button
-                            onClick={handleRemoveAvatar}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                            className="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 rounded-full transition-colors shadow-lg"
-                            title="删除头像"
-                          >
-                            删除
-                          </motion.button>
-                        )}
-                      </div>
-                    </div>
+              {/* Feature Cards */}
+              <div className="flex-shrink-0">
+                <FeatureCards />
+              </div>
 
-                    {/* Floating 3D Elements - 优化样式 */}
-                    <motion.div 
-                      className="absolute top-8 right-8 w-16 h-16 bg-gradient-to-br from-accent-cyan/30 to-primary-400/20 rounded-2xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
-                      style={{ transform: 'translateZ(30px)' }}
-                      animate={{
-                        y: [0, -20, 0],
-                        rotateZ: [0, 10, -10, 0],
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      whileHover={{ scale: 1.2 }}
-                    >
-                      <span className="text-3xl filter drop-shadow-lg">💻</span>
-                    </motion.div>
-                    
-                    <motion.div 
-                      className="absolute bottom-8 left-8 w-14 h-14 bg-gradient-to-br from-secondary-400/30 to-accent-orange/20 rounded-2xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
-                      style={{ transform: 'translateZ(40px)' }}
-                      animate={{
-                        y: [0, 15, 0],
-                        rotateZ: [0, -15, 15, 0],
-                      }}
-                      transition={{
-                        duration: 5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                      whileHover={{ scale: 1.2 }}
-                    >
-                      <span className="text-2xl filter drop-shadow-lg">🚀</span>
-                    </motion.div>
-
-                    <motion.div 
-                      className="absolute top-1/2 -right-4 w-10 h-10 bg-gradient-to-br from-primary-400/30 to-accent-yellow/20 rounded-xl flex items-center justify-center backdrop-blur-md overflow-hidden border border-white/20 shadow-xl"
-                      style={{ transform: 'translateZ(50px)' }}
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        rotate: [0, 180, 360],
-                      }}
-                      transition={{
-                        duration: 6,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                      whileHover={{ scale: 1.4 }}
-                    >
-                      <span className="text-lg filter drop-shadow-lg">✨</span>
-                    </motion.div>
-                  </div>
-                </div>
-              </Card3D>
+              {/* Rotating Text */}
+              <div className="flex-shrink-0">
+                <RotatingText />
+              </div>
             </motion.div>
+
           </div>
 
           {/* Scroll Indicator */}
