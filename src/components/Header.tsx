@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import LogoEasterEgg from './LogoEasterEgg'
 
 const navItems = [
   { name: '首页', href: '#home' },
@@ -15,39 +16,57 @@ const navItems = [
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
+      
+      // 计算滚动进度
+      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+      const scrolled = (window.scrollY / windowHeight) * 100
+      setScrollProgress(scrolled)
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // 根据滚动进度动态计算背景色
+  const getBackgroundColor = () => {
+    if (scrollProgress < 25) return 'from-mint-50/80 to-sky-50/80'
+    if (scrollProgress < 50) return 'from-sky-50/80 to-lemon-50/80'
+    if (scrollProgress < 75) return 'from-lemon-50/80 to-mint-50/80'
+    return 'from-mint-50/80 to-sky-50/80'
+  }
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled ? 'py-2' : 'py-4'
       }`}
     >
       <div className="container mx-auto px-6">
         <nav className={`${
-          isScrolled ? 'bg-white/95 shadow-soft' : 'bg-white/80'
-        } backdrop-blur-lg rounded-full px-6 py-3 flex items-center justify-between transition-all duration-300`}>
+          isScrolled 
+            ? `bg-gradient-to-r ${getBackgroundColor()} shadow-soft` 
+            : 'bg-white/80'
+        } backdrop-blur-lg rounded-full px-6 py-3 flex items-center justify-between transition-all duration-500 relative overflow-hidden`}>
           
-          {/* Logo */}
-          <motion.a
-            href="#home"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="text-2xl font-bold font-display text-gradient"
-          >
-            Chiba
-          </motion.a>
+          {/* 进度指示条 */}
+          <motion.div
+            className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-mint-400 via-sky-400 to-lemon-400"
+            style={{ width: `${scrollProgress}%` }}
+            transition={{ duration: 0.1 }}
+          />
+          
+          {/* Logo - 带彩蛋 */}
+          <a href="#home">
+            <LogoEasterEgg />
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">

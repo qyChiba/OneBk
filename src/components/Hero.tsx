@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, Code, Heart } from 'lucide-react'
+import TypewriterEffect from './TypewriterEffect'
 
 export default function Hero() {
   return (
@@ -30,16 +31,23 @@ export default function Hero() {
               </p>
             </motion.div>
 
-            {/* 描述 */}
-            <motion.p
+            {/* 描述 - 打字机效果 */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-lg text-gray-600 leading-relaxed font-body"
+              className="text-lg text-gray-600 leading-relaxed font-body min-h-[3.5rem]"
             >
-              嗨！👋 我是千叶，一个热爱编程的高中生。
-              在这里记录我的学习之旅，分享有趣的项目和想法。
-            </motion.p>
+              <TypewriterEffect
+                texts={[
+                  '嗨！👋 我是千叶，一个热爱编程的高中生',
+                  '在这里记录我的学习之旅 ✨',
+                  '分享有趣的项目和想法 💡',
+                  '用代码创造无限可能 🚀'
+                ]}
+                speed={80}
+              />
+            </motion.div>
 
             {/* 标签 */}
             <motion.div
@@ -113,7 +121,20 @@ export default function Hero() {
                 whileHover={{ scale: 1.05, y: -5 }}
                 className={`card-${item.color} p-6 text-center hover-lift`}
               >
-                <div className="text-4xl mb-3">{item.icon}</div>
+                <motion.div
+                  className="text-4xl mb-3"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity,
+                    delay: index * 0.5
+                  }}
+                >
+                  {item.icon}
+                </motion.div>
                 <h3 className="font-bold text-lg mb-2 font-display">{item.title}</h3>
                 <p className="text-sm text-gray-600 font-body">{item.desc}</p>
               </motion.div>

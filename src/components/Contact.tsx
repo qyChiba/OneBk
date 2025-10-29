@@ -65,8 +65,8 @@ export default function Contact() {
                 className={`card-${contact.color} p-6 text-center hover-lift group`}
               >
                 <motion.div
-                  whileHover={{ rotate: 360, scale: 1.2 }}
-                  transition={{ duration: 0.6 }}
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
                   className="inline-block mb-4"
                 >
                   <Icon className="w-12 h-12 text-mint-600 group-hover:text-mint-500 transition-colors" />

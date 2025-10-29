@@ -19,6 +19,23 @@
     min-width: 320px;
   }
 
+  /* 移除所有元素的焦点框 */
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: 2px solid rgba(45, 212, 191, 0.5);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  /* 移除按钮和链接的默认焦点框 */
+  button:focus,
+  a:focus {
+    outline: none;
+  }
+
   @keyframes gradientShift {
     0%, 100% {
       background-position: 0% 50%;
@@ -103,15 +120,51 @@
 
   /* 按钮样式 */
   .btn {
-    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 transform;
+    @apply px-6 py-3 rounded-full font-medium transition-all duration-300 transform relative overflow-hidden;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .btn:focus,
+  .btn:active {
+    outline: none !important;
   }
 
   .btn-primary {
     @apply bg-gradient-to-r from-mint-400 to-mint-500 text-white shadow-soft hover:shadow-hover hover:scale-105;
+    outline: none !important;
+    will-change: transform, box-shadow;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease-out;
+  }
+
+  .btn-primary:hover::before {
+    left: 100%;
   }
 
   .btn-secondary {
-    @apply bg-white border-2 border-mint-400 text-mint-600 hover:bg-mint-50 shadow-soft hover:shadow-hover hover:scale-105;
+    @apply bg-white text-mint-600 shadow-soft hover:shadow-hover hover:scale-105;
+    border: 2px solid #2dd4bf;
+    outline: none !important;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-mint-50;
+    border-color: #14b8a6;
+  }
+
+  .btn-secondary:focus,
+  .btn-secondary:active {
+    outline: none !important;
   }
 
   /* 动画 */
@@ -127,40 +180,22 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  .animate-breathe {
-    animation: breathe 3s ease-in-out infinite;
-  }
-
-  .animate-pulse-gentle {
-    animation: pulseGentle 2s ease-in-out infinite;
-  }
-
   .hover-lift {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    will-change: transform, box-shadow;
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 40px rgba(45, 212, 191, 0.15);
-  }
-
-  .hover-rotate {
-    transition: transform 0.3s ease;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
   }
 
-  .hover-rotate:hover {
-    transform: rotate(5deg) scale(1.1);
+  .hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(45, 212, 191, 0.12);
   }
 
   .hover-glow {
-    transition: all 0.3s ease;
-    will-change: box-shadow;
+    transition: box-shadow 0.3s ease;
   }
 
   .hover-glow:hover {
-    box-shadow: 0 0 20px rgba(45, 212, 191, 0.4), 0 0 40px rgba(45, 212, 191, 0.2);
+    box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
   }
 }
 
