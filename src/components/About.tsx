@@ -64,7 +64,12 @@ export default function About() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-16"
+          transition={{
+            duration: 0.3, // 减少duration
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          className="text-center mb-16 hardware-accelerate"
+          style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
         >
           <h2 className="text-4xl md:text-5xl font-bold font-display mb-4">
             <span className="text-gradient">关于我</span>
@@ -81,8 +86,13 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.2 }}
-              className="card p-8"
+              transition={{ 
+                delay: 0.1, // 减少delay
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="card p-8 hardware-accelerate optimize-render"
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
               <h3 className="text-2xl font-bold font-display mb-6">我的故事 📖</h3>
               <div className="space-y-4 text-gray-600 font-body leading-relaxed">
@@ -147,11 +157,16 @@ export default function About() {
               return (
                 <motion.div
                   key={feature.title}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.3 + index * 0.1 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{
+                    delay: 0.2 + index * 0.05, // 减少delay
+                    duration: 0.3,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className={`card-${feature.color} p-6 text-center hover-lift`}
+                  className="card p-6 text-center hardware-accelerate optimize-render"
+                  style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
                 >
                   <Icon className="w-12 h-12 mx-auto mb-4 text-mint-600" />
                   <h4 className="font-bold text-lg mb-2 font-display">{feature.title}</h4>

@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useTransform } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { Sparkles, Code, Heart, Zap, Award, BookOpen, X } from 'lucide-react'
@@ -48,6 +48,134 @@ const features = [
   },
 ]
 
+function Card3D({ feature, index, isInView, onSelect }: any) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], [8, -8])
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], [-8, 8])
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    
+    const rect = cardRef.current.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    
+    const x = (e.clientX - centerX) / rect.width
+    const y = (e.clientY - centerY) / rect.height
+    
+    mouseX.set(x)
+    mouseY.set(y)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
+
+  const Icon = feature.icon
+
+  return (
+    <motion.div
+      ref={cardRef}
+      layoutId={`card-${feature.id}`}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={isInView ? { 
+        opacity: 1, 
+        scale: 1,
+      } : {}}
+      transition={{ 
+        delay: index * 0.03, // 减少延迟
+        duration: 0.2, // 减少duration
+        ease: [0.16, 1, 0.3, 1], // 自定义缓动函数，更流畅
+      }}
+      whileHover={{ 
+        scale: 1.08, 
+        z: 50,
+        transition: {
+          duration: 0.15, // 减少duration
+          ease: [0.16, 1, 0.3, 1],
+        }
+      }}
+      onClick={onSelect}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: 'preserve-3d',
+        willChange: 'transform',
+        transform: 'translateZ(0)',
+      }}
+      className={`${feature.gridClass} card-${feature.color} p-8 cursor-pointer relative overflow-hidden flex flex-col justify-center hardware-accelerate optimize-render`}
+    >
+      {/* 背景装饰 */}
+      <motion.div 
+        className="absolute top-0 right-0 w-24 h-24 bg-white/20 rounded-full blur-2xl pointer-events-none"
+        style={{
+          x: useTransform(mouseX, [-0.5, 0.5], [-20, 20]),
+          y: useTransform(mouseY, [-0.5, 0.5], [-20, 20]),
+          willChange: 'transform',
+        }}
+      />
+      
+      {/* 图标 */}
+      <motion.div
+        layoutId={`icon-${feature.id}`}
+        className="mb-4 relative z-10"
+        style={{
+          transform: 'translateZ(20px)',
+          willChange: 'transform',
+        }}
+      >
+        <motion.div
+          animate={{
+            rotate: [0, 5, -5, 0],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 3, // 减少duration
+            repeat: Infinity,
+            delay: index * 0.2, // 减少延迟
+            ease: 'easeInOut',
+          }}
+          className="text-5xl"
+          style={{ 
+            willChange: 'transform',
+            transform: 'translateZ(0)',
+          }}
+        >
+          {feature.emoji}
+        </motion.div>
+      </motion.div>
+
+      {/* 内容 */}
+      <motion.h3 
+        layoutId={`title-${feature.id}`} 
+        className="text-xl font-bold font-display mb-2 relative z-10"
+        style={{
+          transform: 'translateZ(15px)',
+          willChange: 'transform',
+        }}
+      >
+        {feature.title}
+      </motion.h3>
+      <motion.p 
+        layoutId={`desc-${feature.id}`} 
+        className="text-sm text-gray-600 font-body leading-relaxed relative z-10"
+        style={{
+          transform: 'translateZ(10px)',
+          willChange: 'transform',
+        }}
+      >
+        {feature.description}
+      </motion.p>
+    </motion.div>
+  )
+}
+
 export default function LayoutGrid() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
@@ -56,7 +184,7 @@ export default function LayoutGrid() {
   const selected = features.find(f => f.id === selectedId)
 
   return (
-    <section className="py-24 px-6" ref={ref}>
+    <section className="py-24 px-6" ref={ref} style={{ perspective: '1000px' }}>
       <div className="container mx-auto max-w-6xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -74,62 +202,17 @@ export default function LayoutGrid() {
         {/* Layout Grid - 仿图片交错布局 */}
         <motion.div
           layout
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 auto-rows-[200px] overflow-visible"
         >
-          {features.map((feature, index) => {
-            const Icon = feature.icon
-
-            return (
-              <motion.div
-                key={feature.id}
-                layoutId={`card-${feature.id}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                onClick={() => setSelectedId(feature.id)}
-                className={`${feature.gridClass} card-${feature.color} p-8 cursor-pointer hover-lift relative overflow-hidden flex flex-col justify-center`}
-              >
-                {/* 背景装饰 */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-white/20 rounded-full blur-2xl" />
-                
-                {/* 图标 */}
-                <motion.div
-                  layoutId={`icon-${feature.id}`}
-                  className="mb-4"
-                >
-                  <motion.div
-                    animate={{
-                      rotate: [0, 5, -5, 0],
-                      scale: [1, 1.05, 1],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      delay: index * 0.3,
-                    }}
-                    className="text-5xl"
-                  >
-                    {feature.emoji}
-                  </motion.div>
-                </motion.div>
-
-                {/* 内容 */}
-                <motion.h3 layoutId={`title-${feature.id}`} className="text-xl font-bold font-display mb-2">
-                  {feature.title}
-                </motion.h3>
-                <motion.p layoutId={`desc-${feature.id}`} className="text-sm text-gray-600 font-body leading-relaxed">
-                  {feature.description}
-                </motion.p>
-
-                {/* 点击提示 */}
-                <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-mint-400 via-sky-400 to-lemon-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                  whileHover={{ scaleX: 1 }}
-                />
-              </motion.div>
-            )
-          })}
+          {features.map((feature, index) => (
+            <Card3D
+              key={feature.id}
+              feature={feature}
+              index={index}
+              isInView={isInView}
+              onSelect={() => setSelectedId(feature.id)}
+            />
+          ))}
         </motion.div>
 
         {/* 展开的详情弹窗 */}

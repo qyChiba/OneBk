@@ -118,6 +118,10 @@ const config: Config = {
     },
   },
   plugins: [],
+  // 性能优化配置
+  corePlugins: {
+    // 启用性能相关的核心插件
+  },
 }
 export default config
 

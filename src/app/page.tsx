@@ -8,7 +8,7 @@ import SoftBackground from '@/components/SoftBackground'
 import LoadingAnimation from '@/components/LoadingAnimation'
 
 // 懒加载非关键组件
-const DailyQuote = dynamic(() => import('@/components/DailyQuote'))
+// const DailyQuote = dynamic(() => import('@/components/DailyQuote')) // 已移至菜单栏
 const LayoutGrid = dynamic(() => import('@/components/LayoutGrid'))
 const ScrollVelocity = dynamic(() => import('@/components/ScrollVelocity'))
 const InteractiveCodeBlock = dynamic(() => import('@/components/InteractiveCodeBlock'))
@@ -23,7 +23,7 @@ const Blog = dynamic(() => import('@/components/Blog'))
 const Contact = dynamic(() => import('@/components/Contact'))
 const Footer = dynamic(() => import('@/components/Footer'))
 
-// 交互层组件
+// 交互层组件 - 优化加载
 const ScrollProgress = dynamic(() => import('@/components/ScrollProgress'))
 const MouseTrail = dynamic(() => import('@/components/MouseTrail'))
 const GradientLight = dynamic(() => import('@/components/GradientLight'))
@@ -36,35 +36,39 @@ export default function Home() {
   return (
     <>
       <LoadingAnimation />
-      <main className="min-h-screen relative">
+      <main className="min-h-screen relative animation-container">
         {/* 背景层 - 极简模式，禁用重型效果 */}
         <SoftBackground />
         {/* <GradientLight /> 禁用以提升滚动性能 */}
         {/* <ParticleEngine /> 禁用以提升滚动性能 */}
         
-        {/* 页面内容 */}
-        <FloatingDock />
-        <Hero />
-        <DailyQuote />
-        <About />
-        <LayoutGrid />
-        <ScrollVelocity />
-        <InteractiveCodeBlock />
-        <Skills />
-        <SkillRadar />
-        <ExpandableCards />
-        <Projects />
-        <Stats />
-        <ProgressTracker />
-        <Timeline />
-        <Blog />
-        <Contact />
-        <Footer />
+        {/* 页面内容 - 性能优化容器 */}
+        <div className="optimize-render">
+          <FloatingDock />
+          <Hero />
+          {/* <DailyQuote /> 已移至菜单栏，不再在此处显示 */}
+          <About />
+          <LayoutGrid />
+          <ScrollVelocity />
+          <InteractiveCodeBlock />
+          <Skills />
+          <SkillRadar />
+          <ExpandableCards />
+          <Projects />
+          <Stats />
+          <ProgressTracker />
+          <Timeline />
+          <Blog />
+          <Contact />
+          <Footer />
+        </div>
         
-        {/* 交互层 - 优化版 */}
-        <ScrollProgress />
-        {/* <MouseTrail /> 禁用以提升滚动性能 */}
-        <BackToTop />
+        {/* 交互层 - 优化性能 */}
+        <div className="hardware-accelerate optimize-render">
+          <ScrollProgress />
+          {/* <MouseTrail /> 禁用以提升滚动性能 */}
+          <BackToTop />
+        </div>
         
         {/* 彩蛋系统已移除 */}
       </main>

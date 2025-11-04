@@ -14,14 +14,23 @@ export default function Hero() {
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-6"
+            transition={{ 
+              duration: 0.4, // 减少duration
+              ease: [0.16, 1, 0.3, 1],
+            }}
+            className="space-y-6 hardware-accelerate"
+            style={{ transform: 'translateZ(0)' }}
           >
             {/* 主标题 */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ 
+                delay: 0.1, // 减少delay
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
               <h1 className="text-5xl md:text-7xl font-bold font-display mb-4">
                 <span className="text-gradient">创作工作室</span>
@@ -35,12 +44,17 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-lg text-gray-600 leading-relaxed font-body min-h-[3.5rem]"
+              transition={{ 
+                delay: 0.2, // 减少delay
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="text-lg text-gray-600 leading-relaxed font-body min-h-[3.5rem] hardware-accelerate"
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
               <TypewriterEffect
                 texts={[
-                  '嗨！👋 我是千叶，一个热爱编程的高中生',
+                  '嗨！�� 我是千叶，一个热爱编程的高中生',
                   '在这里记录我的学习之旅 ✨',
                   '分享有趣的项目和想法 💡',
                   '用代码创造无限可能 🚀'
@@ -53,17 +67,31 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-3"
+              transition={{ 
+                delay: 0.3, // 减少delay
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="flex flex-wrap gap-3 hardware-accelerate"
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
               {['💻 编程', '🎨 设计', '📚 学习', '🚀 创新'].map((tag, index) => (
                 <motion.span
                   key={tag}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.7 + index * 0.1 }}
-                  whileHover={{ scale: 1.1, y: -2 }}
-                  className="px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-700 shadow-soft hover:shadow-hover transition-all cursor-default"
+                  transition={{ 
+                    delay: 0.35 + index * 0.05, // 减少delay
+                    duration: 0.2,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  whileHover={{ 
+                    scale: 1.1, 
+                    y: -2,
+                    transition: { duration: 0.1, ease: [0.16, 1, 0.3, 1] }
+                  }}
+                  className="px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full text-gray-700 shadow-soft hover:shadow-hover transition-all cursor-default hardware-accelerate optimize-render"
+                  style={{ willChange: 'transform', transform: 'translateZ(0)' }}
                 >
                   {tag}
                 </motion.span>
@@ -74,14 +102,21 @@ export default function Hero() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.9 }}
-              className="flex gap-4"
+              transition={{ 
+                delay: 0.5, // 减少delay
+                duration: 0.3,
+                ease: [0.16, 1, 0.3, 1],
+              }}
+              className="flex gap-4 hardware-accelerate"
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
               <motion.a
                 href="#projects"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn btn-primary flex items-center gap-2"
+                transition={{ duration: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="btn btn-primary flex items-center gap-2 hardware-accelerate optimize-render"
+                style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
                 <Code className="w-5 h-5" />
                 查看项目
@@ -92,7 +127,9 @@ export default function Hero() {
                 href="#contact"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="btn btn-secondary flex items-center gap-2"
+                transition={{ duration: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="btn btn-secondary flex items-center gap-2 hardware-accelerate optimize-render"
+                style={{ willChange: 'transform', transform: 'translateZ(0)' }}
               >
                 <Heart className="w-5 h-5" />
                 联系我

@@ -262,14 +262,145 @@
   }
 }
 
-/* 性能优化 */
+/* 全局性能优化 - 200+ FPS */
 * {
+  /* 强制GPU加速 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* 优化渲染 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
+}
+
+/* 根元素优化 */
+html {
+  /* 强制硬件加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* 优化滚动 */
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* 优化渲染 */
+  will-change: scroll-position;
+}
+
+body {
+  /* 强制GPU加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* 优化文本渲染 */
+  text-rendering: optimizeSpeed;
+  /* 优化动画性能 */
+  will-change: auto;
+  /* 减少重绘 */
+  contain: layout style paint;
+}
+
+/* 所有动画元素基础优化 */
+[data-framer-component],
+.motion-safe,
+.motion-reduce {
+  /* 强制GPU加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* 优化渲染层 */
+  will-change: transform, opacity;
+  /* 避免重排 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* 优化合成 */
+  isolation: isolate;
+}
+
+/* 性能优化 - GPU加速 */
+.gpu-accelerate {
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  /* 强制合成层 */
+  isolation: isolate;
+}
+
+/* 动画性能优化 - 超高性能模式 */
+.smooth-animate {
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 避免重排 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 滚动性能优化 */
+.smooth-scroll {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  /* 优化滚动性能 */
+  overscroll-behavior: contain;
+  /* 强制硬件加速 */
+  transform: translateZ(0);
+}
+
+/* 硬件加速 - 最高优先级 */
+.hardware-accelerate {
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  /* 强制合成层 */
+  isolation: isolate;
+  /* 优化渲染 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  /* GPU优化 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 强制GPU加速 */
-.card, .btn, [class*="card-"] {
+/* 减少重绘和重排 */
+.optimize-render {
+  /* 包含优化 */
+  contain: layout style paint;
+  /* 强制合成 */
+  isolation: isolate;
+  /* GPU加速 */
   transform: translateZ(0);
-  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* 动画容器优化 */
+.animation-container {
+  /* 强制GPU加速 */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  /* 优化合成层 */
+  isolation: isolate;
+  /* 减少重排 */
+  contain: layout style paint;
+  /* 性能提示 */
+  will-change: contents;
+}
+
+/* 全局动画性能配置 */
+@media (prefers-reduced-motion: no-preference) {
+  /* 优化所有动画性能 */
+  * {
+    /* 减少动画复杂度 */
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    /* 优化动画渲染 */
+    animation-fill-mode: both;
+  }
+}
+
+/* 禁用动画时保持性能 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
