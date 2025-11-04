@@ -22,9 +22,15 @@ export default function ScrollProgress() {
   const [currentSection, setCurrentSection] = useState(0)
 
   useEffect(() => {
+    let lastIndex = -1
     return scrollYProgress.on('change', (latest) => {
       const index = Math.floor(latest * sections.length)
-      setCurrentSection(Math.min(index, sections.length - 1))
+      const newIndex = Math.min(index, sections.length - 1)
+      // 只在变化时更新，减少渲染
+      if (newIndex !== lastIndex) {
+        setCurrentSection(newIndex)
+        lastIndex = newIndex
+      }
     })
   }, [scrollYProgress])
 
@@ -63,20 +69,46 @@ export default function ScrollProgress() {
       </motion.div>
 
       {/* 右侧导航点 */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-40 space-y-3">
-        {sections.map((section, index) => (
-          <motion.a
-            key={section.name}
-            href={`#${section.name === '首页' ? 'home' : section.name === '关于' ? 'about' : section.name === '技能' ? 'skills' : section.name === '项目' ? 'projects' : 'contact'}`}
-            whileHover={{ scale: 1.5, x: -5 }}
-            className={`block w-3 h-3 rounded-full transition-all ${
-              currentSection === index
-                ? `bg-${section.color}-500 scale-125`
-                : 'bg-gray-300'
-            }`}
-            title={section.name}
-          />
-        ))}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-40 space-y-4">
+        {sections.map((section, index) => {
+          const isActive = currentSection === index
+          const dotColor = section.color === 'mint' ? 'bg-mint-500' : 
+                          section.color === 'sky' ? 'bg-sky-500' : 
+                          'bg-lemon-500'
+          
+          return (
+            <motion.a
+              key={section.name}
+              href={`#${section.name === '首页' ? 'home' : section.name === '关于' ? 'about' : section.name === '技能' ? 'skills' : section.name === '项目' ? 'projects' : 'contact'}`}
+              whileHover={{ scale: 1.5, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              className="block relative"
+              title={section.name}
+              style={{ outline: 'none' }}
+            >
+              <div
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  isActive ? `${dotColor} scale-125` : 'bg-gray-300 hover:bg-gray-400'
+                }`}
+              />
+              
+              {/* 激活时的光晕 */}
+              {isActive && (
+                <motion.div
+                  className={`absolute inset-0 rounded-full ${dotColor} opacity-50`}
+                  animate={{
+                    scale: [1, 1.8, 1],
+                    opacity: [0.5, 0, 0.5],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                />
+              )}
+            </motion.a>
+          )
+        })}
       </div>
     </>
   )

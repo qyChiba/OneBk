@@ -20,7 +20,7 @@ export default function ParticleEngine() {
   const lastScrollY = useRef(0)
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // 生成粒子
+  // 生成粒子 - 优化版
   const createParticles = (count: number) => {
     const colors = ['#2dd4bf', '#38bdf8', '#facc15']
     return Array.from({ length: count }, () => ({
@@ -29,57 +29,45 @@ export default function ParticleEngine() {
       y: Math.random() * window.innerHeight,
       vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
-      size: Math.random() * 3 + 1,
+      size: Math.random() * 2 + 1,
       color: colors[Math.floor(Math.random() * colors.length)],
       life: 1,
     }))
   }
 
   useEffect(() => {
-    setParticles(createParticles(30))
+    setParticles(createParticles(15)) // 30 → 15
   }, [])
 
-  // 监听滚动速度
+  // 禁用滚动监听 - 极致优化
+  // 不再根据滚动生成新粒子，减少滚动时的性能消耗
+
+  // 粒子物理更新 - 降低频率
   useEffect(() => {
     let rafId: number
+    let lastUpdate = 0
+    const updateInterval = 33 // 30fps足够（人眼难以察觉）
     
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      const velocity = Math.abs(currentScrollY - lastScrollY.current)
-      setScrollVelocity(velocity)
-      lastScrollY.current = currentScrollY
-
-      // 滚动速度超过阈值时添加粒子
-      if (velocity > 5) {
-        setParticles((prev) => [
-          ...prev.slice(-25),
-          ...createParticles(Math.min(5, Math.floor(velocity / 10))),
-        ])
+    const updateParticles = (timestamp: number) => {
+      if (timestamp - lastUpdate > updateInterval) {
+        setParticles((prev) =>
+          prev
+            .map((p) => ({
+              ...p,
+              x: p.x + p.vx + scrollVelocity * 0.1,
+              y: p.y + p.vy,
+              vy: p.vy + 0.05,
+              life: p.life - 0.015, // 更快消失
+            }))
+            .filter((p) => p.life > 0 && p.y < window.innerHeight + 50)
+        )
+        lastUpdate = timestamp
       }
+      rafId = requestAnimationFrame(updateParticles)
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // 粒子物理更新
-  useEffect(() => {
-    const updateParticles = () => {
-      setParticles((prev) =>
-        prev
-          .map((p) => ({
-            ...p,
-            x: p.x + p.vx + scrollVelocity * 0.1,
-            y: p.y + p.vy,
-            vy: p.vy + 0.05, // 重力
-            life: p.life - 0.01,
-          }))
-          .filter((p) => p.life > 0 && p.y < window.innerHeight + 50)
-      )
-    }
-
-    const interval = setInterval(updateParticles, 16) // ~60fps
-    return () => clearInterval(interval)
+    rafId = requestAnimationFrame(updateParticles)
+    return () => cancelAnimationFrame(rafId)
   }, [scrollVelocity])
 
   return (

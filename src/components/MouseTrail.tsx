@@ -15,22 +15,19 @@ export default function MouseTrail() {
 
   useEffect(() => {
     let lastTime = 0
-    const throttle = 30
+    const throttle = 60 // 30 → 60ms，减少触发频率
 
     const handleMouseMove = (e: MouseEvent) => {
       const now = Date.now()
-      if (now - lastTime < throttle) {
-        setCursorGlow({ x: e.clientX, y: e.clientY })
-        return
-      }
-
-      lastTime = now
       setCursorGlow({ x: e.clientX, y: e.clientY })
       
+      if (now - lastTime < throttle) return
+
+      lastTime = now
       setTrails((prev) => [
         ...prev,
         { x: e.clientX, y: e.clientY, id: now },
-      ].slice(-12))
+      ].slice(-8)) // 12 → 8，减少轨迹点
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
@@ -39,20 +36,13 @@ export default function MouseTrail() {
 
   return (
     <>
-      {/* 光标光晕 */}
-      <motion.div
-        className="fixed w-8 h-8 rounded-full pointer-events-none z-50 mix-blend-screen"
+      {/* 光标光晕 - 禁用脉冲动画 */}
+      <div
+        className="fixed w-6 h-6 rounded-full pointer-events-none z-50 mix-blend-screen transition-all duration-100"
         style={{
-          left: cursorGlow.x - 16,
-          top: cursorGlow.y - 16,
-          background: 'radial-gradient(circle, rgba(45, 212, 191, 0.4) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
+          left: cursorGlow.x - 12,
+          top: cursorGlow.y - 12,
+          background: 'radial-gradient(circle, rgba(45, 212, 191, 0.3) 0%, transparent 70%)',
         }}
       />
 

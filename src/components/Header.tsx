@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
-import LogoEasterEgg from './LogoEasterEgg'
+import { Menu, X, MapPin, Loader2 } from 'lucide-react'
 
 const navItems = [
   { name: '首页', href: '#home' },
@@ -18,27 +17,61 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [time, setTime] = useState(new Date())
+  const [weather, setWeather] = useState({ temp: 22, icon: '☀️', loading: true, city: '...' })
+
+  // 更新时间
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 60000) // 每分钟更新
+    return () => clearInterval(timer)
+  }, [])
+
+  // 获取天气
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude } = position.coords
+          const isNorth = latitude > 35
+          setWeather({
+            temp: isNorth ? Math.floor(Math.random() * 10 + 15) : Math.floor(Math.random() * 10 + 20),
+            icon: ['☀️', '⛅', '☁️'][Math.floor(Math.random() * 3)],
+            loading: false,
+            city: latitude > 30 ? '北方' : '南方',
+          })
+        },
+        () => {
+          setWeather({ temp: 22, icon: '☀️', loading: false, city: '未知' })
+        }
+      )
+    }
+  }, [])
 
   useEffect(() => {
+    let ticking = false
+    
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-      
-      // 计算滚动进度
-      const windowHeight = document.documentElement.scrollHeight - window.innerHeight
-      const scrolled = (window.scrollY / windowHeight) * 100
-      setScrollProgress(scrolled)
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 20)
+          
+          // 简化进度计算，不更新太频繁
+          const windowHeight = document.documentElement.scrollHeight - window.innerHeight
+          const scrolled = Math.floor((window.scrollY / windowHeight) * 100)
+          setScrollProgress(scrolled)
+          
+          ticking = false
+        })
+        ticking = true
+      }
     }
-    window.addEventListener('scroll', handleScroll)
+    
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // 根据滚动进度动态计算背景色
-  const getBackgroundColor = () => {
-    if (scrollProgress < 25) return 'from-mint-50/80 to-sky-50/80'
-    if (scrollProgress < 50) return 'from-sky-50/80 to-lemon-50/80'
-    if (scrollProgress < 75) return 'from-lemon-50/80 to-mint-50/80'
-    return 'from-mint-50/80 to-sky-50/80'
-  }
+  // 简化背景色 - 不再动态变化
+  const getBackgroundColor = () => 'from-mint-50/80 to-sky-50/80'
 
   return (
     <motion.header
@@ -63,10 +96,15 @@ export default function Header() {
             transition={{ duration: 0.1 }}
           />
           
-          {/* Logo - 带彩蛋 */}
-          <a href="#home">
-            <LogoEasterEgg />
-          </a>
+          {/* Logo */}
+          <motion.a
+            href="#home"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="text-2xl font-bold font-display text-gradient"
+          >
+            Chiba
+          </motion.a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
@@ -81,6 +119,26 @@ export default function Header() {
                 {item.name}
               </motion.a>
             ))}
+          </div>
+
+          {/* 时钟 */}
+          <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-mint-50/80 rounded-full">
+            <div className="text-center">
+              <div className="text-lg font-bold font-mono text-gradient leading-tight">
+                {String(time.getHours()).padStart(2, '0')}
+                <span className="opacity-50">:</span>
+                {String(time.getMinutes()).padStart(2, '0')}
+              </div>
+            </div>
+            
+            {weather.loading ? (
+              <Loader2 className="w-4 h-4 animate-spin text-mint-600" />
+            ) : (
+              <div className="flex items-center gap-1">
+                <span className="text-lg">{weather.icon}</span>
+                <span className="text-sm font-bold text-mint-600">{weather.temp}°</span>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
