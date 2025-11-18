@@ -15,6 +15,7 @@
 - 🎵 **Web Audio 系统** - 实时音频合成，沉浸式体验
 - 📊 **数据可视化** - 刷题记录热力图、标签分布、难度统计
 - 🎯 **9个创意彩蛋** - 隐藏惊喜等你发现
+- 📈 **51.la 访问统计** - 实时流量分析、访客行为追踪
 
 ## 🚀 快速开始
 
@@ -127,6 +128,7 @@ git push
 - [✨ UI 组件](./INNOVATIVE_UI_COMPONENTS.md) - 创新 UI 组件库
 - [⚡ 性能优化](./PERFORMANCE_OPTIMIZATION.md) - 优化策略
 - [📊 刷题记录](./CODING_RECORDS_QUICK_START.md) - 自动化脚本
+- [📈 51.la 统计](./51LA_SETUP.md) - 网站访问统计配置
 
 ## 🎨 设计理念
 

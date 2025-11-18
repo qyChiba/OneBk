@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Poppins, Montserrat, Nunito, JetBrains_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const poppins = Poppins({ 
@@ -40,6 +41,22 @@ export default function RootLayout({
     <html lang="zh-CN" className="scroll-smooth">
       <body className={`${poppins.variable} ${montserrat.variable} ${nunito.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         {children}
+        
+        {/* 51.la 统计代码 */}
+        <Script
+          id="LA_COLLECT"
+          src="//sdk.51.la/js-sdk-pro.min.js"
+          strategy="afterInteractive"
+          charSet="UTF-8"
+        />
+        <Script id="la-init" strategy="afterInteractive">
+          {`
+            LA.init({
+              id: "3O6i20SbW4QMR1VL",
+              ck: "3O6i20SbW4QMR1VL"
+            })
+          `}
+        </Script>
       </body>
     </html>
   )
